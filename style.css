@@ -1,0 +1,29 @@
+body {
+    font-family: Arial, sans-serif;
+    margin: 40px;
+}
+
+h1 {
+    color: #333;
+}
+
+form {
+    margin-top: 20px;
+}
+
+input {
+    display: block;
+    margin: 5px 0;
+    padding: 8px;
+}
+
+button {
+    padding: 8px 12px;
+    margin-top: 10px;
+    cursor: pointer;
+}
+
+#quote {
+    margin-top: 20px;
+    font-style: italic;
+}
