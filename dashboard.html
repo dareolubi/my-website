@@ -1,23 +1,147 @@
+<!-- 
+CIS046-3 Software for Enterprise
+Author: Oluwole
+
+Academic Integrity Notes:
+- Dashboard layout inspired by common student portal designs.
+- Structure and UI ideas supported by Microsoft Copilot (AI).
+- All final HTML written, adapted, and integrated by me.
+-->
+
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-    <title>Dashboard</title>
+    <meta charset="UTF-8">
+    <title>Student Learning Portal - Dashboard</title>
     <link rel="stylesheet" href="style.css">
 </head>
-<body>
 
-    <h1>Dashboard</h1>
+<body class="dashboard-body" data-page="dashboard">
 
-    <p>Welcome to your dashboard.</p>
+    <div class="app-layout">
 
-<button id="apiButton">Get a random quote</button>
-<p id="quote"></p>
+        <!-- ============================
+             SIDEBAR NAVIGATION
+             ============================ -->
+        <aside class="sidebar">
 
-<button id="colorBtn">Change Background</button>
+            <!-- Logo -->
+            <div class="sidebar-logo">
+                <div class="badge-circle small-badge">
+                    <svg viewBox="0 0 100 100">
+                        <circle cx="50" cy="50" r="45" fill="#b30000" stroke="#d4af37" stroke-width="4" />
+                        <text x="50" y="55" text-anchor="middle" fill="#ffffff" font-size="14">SLP</text>
+                    </svg>
+                </div>
+                <span class="sidebar-title">Portal</span>
+            </div>
 
-<button id="logoutBtn">Logout</button>
+            <!-- Navigation buttons (JS will handle page switching) -->
+            <nav class="sidebar-nav">
+                <button class="nav-item active">Dashboard</button>
+                <button class="nav-item">Courses</button>
+                <button class="nav-item">Assignments</button>
+                <button class="nav-item">Support</button>
+            </nav>
 
-<script src="script.js"></script>
+            <!-- Logout -->
+            <div class="sidebar-footer">
+                <button id="logoutBtn" class="secondary-btn">Logout</button>
+            </div>
 
+        </aside>
+
+        <!-- ============================
+             MAIN CONTENT AREA
+             ============================ -->
+        <div class="main-content">
+
+            <!-- Header -->
+            <header class="dashboard-header">
+                <div class="logo-wrapper">
+                    <div class="crest-logo small-crest">
+                        <svg viewBox="0 0 100 120">
+                            <path d="M10 20 L50 5 L90 20 L90 70 C90 90 70 110 50 115 C30 110 10 90 10 70 Z"
+                                  fill="#b30000" stroke="#d4af37" stroke-width="3" />
+                        </svg>
+                    </div>
+                    <div class="wordmark">
+                        <span class="wordmark-title">Student Learning Portal</span>
+                        <span class="wordmark-subtitle">Dashboard</span>
+                    </div>
+                </div>
+
+                <div class="header-actions">
+                    <button id="themeToggle" class="icon-btn">🌙</button>
+                </div>
+            </header>
+
+            <!-- Dashboard widgets -->
+            <main class="dashboard-grid">
+
+                <!-- Avatar card -->
+                <section class="card card-avatar">
+                    <div class="avatar-wrapper">
+                        <div class="avatar-circle">
+                            <div class="avatar-face">
+                                <div class="avatar-eyes"></div>
+                                <div class="avatar-mouth"></div>
+                            </div>
+                            <div class="avatar-body"></div>
+                        </div>
+                    </div>
+                    <div class="avatar-info">
+                        <h2>Welcome, Student</h2>
+                        <p>Your personalised learning space is ready.</p>
+                    </div>
+                </section>
+
+                <!-- Time & date -->
+                <section class="card card-time">
+                    <h2>Current Time & Date</h2>
+                    <p id="currentTime"></p>
+                    <p id="currentDate"></p>
+                </section>
+
+                <!-- Quote API -->
+                <section class="card card-quote">
+                    <h2>Motivational Quote</h2>
+                    <p id="quoteText">Click the button to load a quote.</p>
+                    <button id="apiButton" class="primary-btn">Get a random quote</button>
+                </section>
+
+                <!-- Fun fact API -->
+                <section class="card card-fact">
+                    <h2>Fun Learning Fact</h2>
+                    <p id="factText">Click the button to load a fun fact.</p>
+                    <button id="factButton" class="secondary-btn">Get a fun fact</button>
+                </section>
+
+                <!-- Weather demo -->
+                <section class="card card-weather">
+                    <h2>Weather (Demo)</h2>
+                    <p id="weatherLocation">Location: London</p>
+                    <p id="weatherInfo">Click the button to simulate weather.</p>
+                    <button id="weatherButton" class="secondary-btn">Update weather</button>
+                </section>
+
+                <!-- Background colour -->
+                <section class="card card-theme">
+                    <h2>Theme & Background</h2>
+                    <p>Use the controls to personalise your experience.</p>
+                    <button id="colorBtn" class="secondary-btn">Random background colour</button>
+                </section>
+
+            </main>
+
+            <footer class="site-footer">
+                <p>&copy; 2026 Student Learning Portal · Designed by Oluwole</p>
+            </footer>
+
+        </div>
+    </div>
+
+    <script src="script.js"></script>
 </body>
 </html>
+

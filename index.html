@@ -1,22 +1,98 @@
+<!-- 
+CIS046-3 Software for Enterprise
+Author: Oluwole
+
+Academic Integrity:
+- Overall layout inspired by common login page patterns.
+- Design ideas and structure supported by Microsoft Copilot (AI).
+- Final HTML written, adapted, and integrated by me for my assignment.
+-->
+
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-    <title>My Web App</title>
+    <meta charset="UTF-8">
+    <title>Student Learning Portal - Login</title>
     <link rel="stylesheet" href="style.css">
 </head>
-<body>
+<body class="login-body" data-page="login">
 
-    <h1>Welcome to My Web App</h1>
+    <!-- Animated background shapes -->
+    <div class="bg-shape bg-shape-1"></div>
+    <div class="bg-shape bg-shape-2"></div>
+    <div class="bg-shape bg-shape-3"></div>
 
-    <p>Please log in to access the dashboard.</p>
+    <!-- Main container -->
+    <div class="login-container">
+        <!-- Premium Crest + Wordmark -->
+        <header class="site-header">
+            <div class="logo-wrapper">
+                <!-- Premium shield crest (SVG, original, not copied from any university) -->
+                <div class="crest-logo">
+                    <svg viewBox="0 0 100 120" xmlns="http://www.w3.org/2000/svg" aria-label="Premium academic crest">
+                        <!-- Shield background -->
+                        <path d="M10 20 L50 5 L90 20 L90 70 C90 90 70 110 50 115 C30 110 10 90 10 70 Z"
+                              fill="#b30000" stroke="#d4af37" stroke-width="3" />
+                        <!-- Book icon -->
+                        <rect x="35" y="40" width="30" height="20" fill="#ffffff" rx="2" />
+                        <line x1="40" y1="45" x2="60" y2="45" stroke="#b30000" stroke-width="2" />
+                        <line x1="40" y1="50" x2="60" y2="50" stroke="#b30000" stroke-width="2" />
+                        <!-- Star -->
+                        <polygon points="50,30 53,36 60,37 55,41 56,48 50,45 44,48 45,41 40,37 47,36"
+                                 fill="#d4af37" />
+                    </svg>
+                </div>
 
-    <form id="loginForm">
-        <input type="text" id="username" placeholder="Enter username">
-        <input type="password" id="password" placeholder="Enter password">
-        <button type="submit">Login</button>
-    </form>
+                <!-- Wordmark -->
+                <div class="wordmark">
+                    <span class="wordmark-title">Student Learning Portal</span>
+                    <span class="wordmark-subtitle">University Red Edition</span>
+                </div>
+            </div>
+        </header>
 
-    <p id="loginMessage"></p>
+        <!-- Login card -->
+        <main class="login-card">
+            <h1>Welcome back</h1>
+            <p class="login-intro">
+                Please log in to access your personalised student dashboard.
+            </p>
+
+            <form id="loginForm" class="login-form">
+                <div class="form-group">
+                    <label for="username">Username</label>
+                    <input type="text" id="username" placeholder="Enter username" required>
+                </div>
+
+                <div class="form-group">
+                    <label for="password">Password</label>
+                    <input type="password" id="password" placeholder="Enter password" required>
+                </div>
+
+                <button type="submit" class="primary-btn">Login</button>
+            </form>
+
+            <p id="loginMessage" class="login-message"></p>
+
+            <!-- Circular badge version of logo -->
+            <div class="badge-wrapper">
+                <div class="badge-circle">
+                    <svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg" aria-label="Circular badge logo">
+                        <circle cx="50" cy="50" r="45" fill="#b30000" stroke="#d4af37" stroke-width="4" />
+                        <text x="50" y="55" text-anchor="middle" fill="#ffffff" font-size="14" font-family="Arial">
+                            SLP
+                        </text>
+                    </svg>
+                </div>
+                <span class="badge-text">Secure Learning Access</span>
+            </div>
+        </main>
+
+        <!-- Footer -->
+        <footer class="site-footer">
+            <p>&copy; 2026 Student Learning Portal · Designed by Oluwole</p>
+        </footer>
+    </div>
 
     <script src="script.js"></script>
 </body>
