@@ -15,72 +15,49 @@ Academic Integrity Notes:
     <title>Assignments - Student Learning Portal</title>
     <link rel="stylesheet" href="style.css">
 </head>
+<body>
 
-<body class="dashboard-body" data-page="assignments">
-
-    <div class="app-layout">
-
-        <!-- Sidebar -->
-        <aside class="sidebar">
-            <div class="sidebar-logo">
-                <div class="badge-circle small-badge">
-                    <svg viewBox="0 0 100 100">
-                        <circle cx="50" cy="50" r="45" fill="#b30000" stroke="#d4af37" stroke-width="4" />
-                        <text x="50" y="55" text-anchor="middle" fill="#ffffff" font-size="14">SLP</text>
-                    </svg>
-                </div>
-                <span class="sidebar-title">Portal</span>
-            </div>
-
-            <nav class="sidebar-nav">
-                <button class="nav-item">Dashboard</button>
-                <button class="nav-item">Courses</button>
-                <button class="nav-item active">Assignments</button>
-                <button class="nav-item">Support</button>
-            </nav>
-
-            <div class="sidebar-footer">
-                <button id="logoutBtn" class="secondary-btn">Logout</button>
-            </div>
-        </aside>
-
-        <!-- Main content -->
-        <div class="main-content">
-
-            <header class="dashboard-header">
-                <div class="logo-wrapper">
-                    <div class="crest-logo small-crest">
-                        <svg viewBox="0 0 100 120">
-                            <path d="M10 20 L50 5 L90 20 L90 70 C90 90 70 110 50 115 C30 110 10 90 10 70 Z"
-                                  fill="#b30000" stroke="#d4af37" stroke-width="3" />
-                        </svg>
-                    </div>
-                    <div class="wordmark">
-                        <span class="wordmark-title">Student Learning Portal</span>
-                        <span class="wordmark-subtitle">Assignments</span>
-                    </div>
-                </div>
-            </header>
-
-            <main class="dashboard-grid">
-                <section class="card">
-                    <h2>Your Assignments</h2>
-                    <p>Track your upcoming assignments and deadlines.</p>
-                    <ul>
-                        <li>Enterprise Systems Report — Due 30 Nov</li>
-                        <li>Cloud Architecture Presentation — Due 12 Dec</li>
-                        <li>Cybersecurity Lab — Due 18 Dec</li>
-                    </ul>
-                </section>
-            </main>
-
-            <footer class="site-footer">
-                <p>&copy; 2026 Student Learning Portal · Designed by Oluwole</p>
-            </footer>
-
-        </div>
+<aside class="sidebar">
+    <div class="sidebar-brand">
+        <img src="wordmark.png" alt="University Wordmark" class="logo-wordmark">
     </div>
+    <ul class="nav-list">
+        <li id="dashboardBtn">Dashboard</li>
+        <li id="coursesBtn">Courses</li>
+        <li id="assignmentsBtn">Assignments</li>
+        <li id="supportBtn">Support</li>
+        <li id="logoutBtn">Logout</li>
+    </ul>
+</aside>
 
-    <script src="script.js"></script>
+<main class="main-content">
+    <header class="main-header">
+        <div class="user-info">
+            <h2>Assignments</h2>
+            <p>Track your deadlines and submission status.</p>
+        </div>
+    </header>
+
+    <section class="card-grid">
+        <article class="card card-primary">
+            <h3>Final Year Project</h3>
+            <p>Due: 12 Nov · Status: In progress</p>
+        </article>
+        <article class="card card-secondary">
+            <h3>Distributed Systems Report</h3>
+            <p>Due: 18 Nov · Status: Not started</p>
+        </article>
+        <article class="card card-accent">
+            <h3>Professional Practice Portfolio</h3>
+            <p>Due: 25 Nov · Status: Drafting</p>
+        </article>
+        <article class="card card-neutral">
+            <h3>Optional Module Assignment</h3>
+            <p>Due: 30 Nov · Status: Planning</p>
+        </article>
+    </section>
+</main>
+
+<script src="script.js"></script>
 </body>
 </html>

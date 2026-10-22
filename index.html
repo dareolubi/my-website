@@ -15,85 +15,31 @@ Academic Integrity:
     <title>Student Learning Portal - Login</title>
     <link rel="stylesheet" href="style.css">
 </head>
-<body class="login-body" data-page="login">
+<body class="login-body">
 
-    <!-- Animated background shapes -->
-    <div class="bg-shape bg-shape-1"></div>
-    <div class="bg-shape bg-shape-2"></div>
-    <div class="bg-shape bg-shape-3"></div>
-
-    <!-- Main container -->
-    <div class="login-container">
-        <!-- Premium Crest + Wordmark -->
-        <header class="site-header">
-            <div class="logo-wrapper">
-                <!-- Premium shield crest (SVG, original, not copied from any university) -->
-                <div class="crest-logo">
-                    <svg viewBox="0 0 100 120" xmlns="http://www.w3.org/2000/svg" aria-label="Premium academic crest">
-                        <!-- Shield background -->
-                        <path d="M10 20 L50 5 L90 20 L90 70 C90 90 70 110 50 115 C30 110 10 90 10 70 Z"
-                              fill="#b30000" stroke="#d4af37" stroke-width="3" />
-                        <!-- Book icon -->
-                        <rect x="35" y="40" width="30" height="20" fill="#ffffff" rx="2" />
-                        <line x1="40" y1="45" x2="60" y2="45" stroke="#b30000" stroke-width="2" />
-                        <line x1="40" y1="50" x2="60" y2="50" stroke="#b30000" stroke-width="2" />
-                        <!-- Star -->
-                        <polygon points="50,30 53,36 60,37 55,41 56,48 50,45 44,48 45,41 40,37 47,36"
-                                 fill="#d4af37" />
-                    </svg>
-                </div>
-
-                <!-- Wordmark -->
-                <div class="wordmark">
-                    <span class="wordmark-title">Student Learning Portal</span>
-                    <span class="wordmark-subtitle">University Red Edition</span>
-                </div>
-            </div>
-        </header>
-
-        <!-- Login card -->
-        <main class="login-card">
-            <h1>Welcome back</h1>
-            <p class="login-intro">
-                Please log in to access your personalised student dashboard.
-            </p>
-
-            <form id="loginForm" class="login-form">
-                <div class="form-group">
-                    <label for="username">Username</label>
-                    <input type="text" id="username" placeholder="Enter username" required>
-                </div>
-
-                <div class="form-group">
-                    <label for="password">Password</label>
-                    <input type="password" id="password" placeholder="Enter password" required>
-                </div>
-
-                <button type="submit" class="primary-btn">Login</button>
-            </form>
-
-            <p id="loginMessage" class="login-message"></p>
-
-            <!-- Circular badge version of logo -->
-            <div class="badge-wrapper">
-                <div class="badge-circle">
-                    <svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg" aria-label="Circular badge logo">
-                        <circle cx="50" cy="50" r="45" fill="#b30000" stroke="#d4af37" stroke-width="4" />
-                        <text x="50" y="55" text-anchor="middle" fill="#ffffff" font-size="14" font-family="Arial">
-                            SLP
-                        </text>
-                    </svg>
-                </div>
-                <span class="badge-text">Secure Learning Access</span>
-            </div>
-        </main>
-
-        <!-- Footer -->
-        <footer class="site-footer">
-            <p>&copy; 2026 Student Learning Portal · Designed by Oluwole</p>
-        </footer>
+<header class="brand-header">
+    <!-- University-style branding: crest, wordmark, circular badge -->
+    <img src="crest.png" alt="University Crest" class="logo-crest">
+    <div class="brand-text">
+        <h1>University of Bedfordshire</h1>
+        <p>Student Learning Portal</p>
     </div>
+    <img src="badge.png" alt="Student Badge" class="logo-badge">
+</header>
 
-    <script src="script.js"></script>
+<div class="login-container">
+    <h2>Sign in to your portal</h2>
+
+    <!-- Virtual Identity: user enters credentials to access personalised dashboard -->
+    <input type="text" id="usernameInput" placeholder="Username">
+    <input type="password" id="passwordInput" placeholder="Password">
+
+    <!-- Event-driven: click triggers login logic in script.js -->
+    <button id="loginBtn">Login</button>
+
+    <p class="error-message" id="loginError"></p>
+</div>
+
+<script src="script.js"></script>
 </body>
 </html>

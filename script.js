@@ -8,211 +8,142 @@ Academic Integrity Notes:
 - All final JavaScript written, adapted, and integrated by me.
 */
 
-// Detect page type
-document.addEventListener("DOMContentLoaded", () => {
-    const pageType = document.body.getAttribute("data-page");
+// ---------------------------
+// LOGIN FUNCTIONALITY
+// ---------------------------
 
-    if (pageType === "login") {
-        initLoginPage();
-    } else if (pageType === "dashboard") {
-        protectDashboard();
-        initDashboardPage();
+document.getElementById("loginBtn")?.addEventListener("click", () => {
+    const username = document.getElementById("usernameInput").value;
+    const password = document.getElementById("passwordInput").value;
+
+    if (username === "student" && password === "password") {
+        localStorage.setItem("username", username);
+        window.location.href = "dashboard.html";
+    } else {
+        document.getElementById("loginError").textContent =
+            "Invalid login. Use username: student, password: password.";
     }
 });
 
-/* ============================
-   LOGIN PAGE LOGIC
-   ============================ */
-function initLoginPage() {
-    const VALID_USERNAME = "user";
-    const VALID_PASSWORD = "password";
+// ---------------------------
+// VIRTUAL IDENTITY ON DASHBOARD
+// ---------------------------
 
-    const loginForm = document.getElementById("loginForm");
-    if (!loginForm) return;
-
-    loginForm.addEventListener("submit", (event) => {
-        event.preventDefault();
-
-        const username = document.getElementById("username").value.trim();
-        const password = document.getElementById("password").value.trim();
-        const message = document.getElementById("loginMessage");
-
-        if (username === VALID_USERNAME && password === VALID_PASSWORD) {
-            localStorage.setItem("loggedIn", "true");
-            localStorage.setItem("username", username);
-
-            message.textContent = "Login successful! Redirecting...";
-            message.style.color = "green";
-
-            setTimeout(() => {
-                window.location.href = "dashboard.html";
-            }, 1000);
-        } else {
-            message.textContent = "Invalid username or password.";
-            message.style.color = "red";
-        }
-    });
+if (document.getElementById("welcomeMessage")) {
+    const user = localStorage.getItem("username") || "Student";
+    document.getElementById("welcomeMessage").textContent = `Welcome, ${user}`;
 }
 
-/* ============================
-   DASHBOARD PROTECTION
-   ============================ */
-function protectDashboard() {
-    if (localStorage.getItem("loggedIn") !== "true") {
-        window.location.href = "index.html";
-    }
-}
+// ---------------------------
+// INTEROPERABILITY: QUOTE API
+// ---------------------------
 
-/* ============================
-   DASHBOARD INITIALISATION
-   ============================ */
-function initDashboardPage() {
-    setupLogout();
-    setupThemeToggle();
-    setupTimeAndDate();
-    setupQuoteAPI();
-    setupFactAPI();
-    setupWeatherDemo();
-    setupBackgroundColorButton();
-    personaliseAvatar();
-    setupSidebarNavigation(); // NEW: Navigation fix
-}
-
-/* ============================
-   LOGOUT BUTTON
-   ============================ */
-function setupLogout() {
-    const logoutBtn = document.getElementById("logoutBtn");
-    if (!logoutBtn) return;
-
-    logoutBtn.addEventListener("click", () => {
-        localStorage.removeItem("loggedIn");
-        localStorage.removeItem("username");
-        window.location.href = "index.html";
-    });
-}
-
-/* ============================
-   DARK MODE TOGGLE
-   ============================ */
-function setupThemeToggle() {
-    const themeToggle = document.getElementById("themeToggle");
-    if (!themeToggle) return;
-
-    themeToggle.addEventListener("click", () => {
-        document.body.classList.toggle("dark-mode");
-    });
-}
-
-/* ============================
-   TIME & DATE WIDGET
-   ============================ */
-function setupTimeAndDate() {
-    const timeEl = document.getElementById("currentTime");
-    const dateEl = document.getElementById("currentDate");
-
-    function updateTime() {
-        const now = new Date();
-        timeEl.textContent = now.toLocaleTimeString();
-        dateEl.textContent = now.toLocaleDateString();
-    }
-
-    updateTime();
-    setInterval(updateTime, 1000);
-}
-
-/* ============================
-   QUOTE API
-   ============================ */
-function setupQuoteAPI() {
-    const apiButton = document.getElementById("apiButton");
-    const quoteText = document.getElementById("quoteText");
-
-    apiButton.addEventListener("click", async () => {
-        try {
-            const response = await fetch("https://api.quotable.io/random");
-            const data = await response.json();
-            quoteText.textContent = `"${data.content}" — ${data.author}`;
-        } catch {
-            quoteText.textContent = "Error fetching quote.";
-        }
-    });
-}
-
-/* ============================
-   FUN FACT API
-   ============================ */
-function setupFactAPI() {
-    const factButton = document.getElementById("factButton");
-    const factText = document.getElementById("factText");
-
-    factButton.addEventListener("click", async () => {
-        try {
-            const response = await fetch("https://uselessfacts.jsph.pl/random.json?language=en");
-            const data = await response.json();
-            factText.textContent = data.text;
-        } catch {
-            factText.textContent = "Error fetching fun fact.";
-        }
-    });
-}
-
-/* ============================
-   WEATHER DEMO
-   ============================ */
-function setupWeatherDemo() {
-    const weatherButton = document.getElementById("weatherButton");
-    const weatherInfo = document.getElementById("weatherInfo");
-
-    const demoConditions = [
-        "18°C · Partly cloudy",
-        "21°C · Sunny",
-        "15°C · Light rain",
-        "12°C · Overcast",
-        "19°C · Breezy"
-    ];
-
-    weatherButton.addEventListener("click", () => {
-        const random = Math.floor(Math.random() * demoConditions.length);
-        weatherInfo.textContent = demoConditions[random];
-    });
-}
-
-/* ============================
-   BACKGROUND COLOUR BUTTON
-   ============================ */
-function setupBackgroundColorButton() {
-    const colorBtn = document.getElementById("colorBtn");
-
-    colorBtn.addEventListener("click", () => {
-        const randomColor = "#" + Math.floor(Math.random() * 16777215).toString(16);
-        document.body.style.backgroundColor = randomColor;
-    });
-}
-
-/* ============================
-   PERSONALISE AVATAR
-   ============================ */
-function personaliseAvatar() {
-    const avatarTitle = document.querySelector(".card-avatar h2");
-    const username = localStorage.getItem("username") || "Student";
-    avatarTitle.textContent = `Welcome, ${username}`;
-}
-
-/* ============================
-   SIDEBAR NAVIGATION (FIX)
-   ============================ */
-function setupSidebarNavigation() {
-    const navButtons = document.querySelectorAll(".sidebar-nav .nav-item");
-
-    navButtons.forEach((btn) => {
-        btn.addEventListener("click", () => {
-            const label = btn.textContent.trim().toLowerCase();
-
-            if (label === "dashboard") window.location.href = "dashboard.html";
-            if (label === "courses") window.location.href = "courses.html";
-            if (label === "assignments") window.location.href = "assignments.html";
-            if (label === "support") window.location.href = "support.html";
+function loadQuote() {
+    fetch("https://api.quotable.io/random")
+        .then(res => res.json())
+        .then(data => {
+            document.getElementById("quoteText").textContent = data.content;
+        })
+        .catch(() => {
+            document.getElementById("quoteText").textContent =
+                "Quote service unavailable.";
         });
-    });
 }
+
+document.getElementById("refreshQuote")?.addEventListener("click", loadQuote);
+
+// ---------------------------
+// INTEROPERABILITY: FUN FACT API
+// ---------------------------
+
+function loadFact() {
+    fetch("https://uselessfacts.jsph.pl/random.json?language=en")
+        .then(res => res.json())
+        .then(data => {
+            document.getElementById("factText").textContent = data.text;
+        })
+        .catch(() => {
+            document.getElementById("factText").textContent =
+                "Fun fact service unavailable.";
+        });
+}
+
+document.getElementById("refreshFact")?.addEventListener("click", loadFact);
+
+// ---------------------------
+// LIVE WEATHER + TIME + DATE
+// ---------------------------
+
+function loadWeather() {
+    fetch("https://api.open-meteo.com/v1/forecast?latitude=52.04&longitude=-0.76&current_weather=true")
+        .then(res => res.json())
+        .then(data => {
+            const w = data.current_weather;
+            document.getElementById("weatherText").textContent =
+                `Milton Keynes: ${w.temperature}°C · Wind ${w.windspeed} km/h`;
+        })
+        .catch(() => {
+            document.getElementById("weatherText").textContent =
+                "Weather unavailable.";
+        });
+}
+
+function loadTime() {
+    const now = new Date();
+    document.getElementById("timeText").textContent =
+        now.toLocaleTimeString();
+    document.getElementById("dateText").textContent =
+        now.toLocaleDateString();
+}
+
+setInterval(loadTime, 1000);
+
+// ---------------------------
+// EVENT-DRIVEN: DARK MODE
+// ---------------------------
+
+document.getElementById("darkModeToggle")?.addEventListener("click", () => {
+    document.body.classList.toggle("dark-mode");
+});
+
+// ---------------------------
+// EVENT-DRIVEN: BACKGROUND COLOUR
+// ---------------------------
+
+document.getElementById("bgColorPicker")?.addEventListener("input", (e) => {
+    document.body.style.background = e.target.value;
+});
+
+// ---------------------------
+// NAVIGATION BUTTONS
+// ---------------------------
+
+document.getElementById("dashboardBtn")?.addEventListener("click", () => {
+    window.location.href = "dashboard.html";
+});
+
+document.getElementById("coursesBtn")?.addEventListener("click", () => {
+    window.location.href = "courses.html";
+});
+
+document.getElementById("assignmentsBtn")?.addEventListener("click", () => {
+    window.location.href = "assignments.html";
+});
+
+document.getElementById("supportBtn")?.addEventListener("click", () => {
+    window.location.href = "support.html";
+});
+
+document.getElementById("logoutBtn")?.addEventListener("click", () => {
+    localStorage.removeItem("username");
+    window.location.href = "index.html";
+});
+
+// ---------------------------
+// INITIAL LOAD
+// ---------------------------
+
+loadQuote();
+loadFact();
+loadWeather();
+loadTime();

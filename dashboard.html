@@ -12,136 +12,77 @@ Academic Integrity Notes:
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Student Learning Portal - Dashboard</title>
+    <title>Dashboard - Student Learning Portal</title>
     <link rel="stylesheet" href="style.css">
 </head>
+<body>
 
-<body class="dashboard-body" data-page="dashboard">
-
-    <div class="app-layout">
-
-        <!-- ============================
-             SIDEBAR NAVIGATION
-             ============================ -->
-        <aside class="sidebar">
-
-            <!-- Logo -->
-            <div class="sidebar-logo">
-                <div class="badge-circle small-badge">
-                    <svg viewBox="0 0 100 100">
-                        <circle cx="50" cy="50" r="45" fill="#b30000" stroke="#d4af37" stroke-width="4" />
-                        <text x="50" y="55" text-anchor="middle" fill="#ffffff" font-size="14">SLP</text>
-                    </svg>
-                </div>
-                <span class="sidebar-title">Portal</span>
-            </div>
-
-            <!-- Navigation buttons (JS will handle page switching) -->
-            <nav class="sidebar-nav">
-                <button class="nav-item active">Dashboard</button>
-                <button class="nav-item">Courses</button>
-                <button class="nav-item">Assignments</button>
-                <button class="nav-item">Support</button>
-            </nav>
-
-            <!-- Logout -->
-            <div class="sidebar-footer">
-                <button id="logoutBtn" class="secondary-btn">Logout</button>
-            </div>
-
-        </aside>
-
-        <!-- ============================
-             MAIN CONTENT AREA
-             ============================ -->
-        <div class="main-content">
-
-            <!-- Header -->
-            <header class="dashboard-header">
-                <div class="logo-wrapper">
-                    <div class="crest-logo small-crest">
-                        <svg viewBox="0 0 100 120">
-                            <path d="M10 20 L50 5 L90 20 L90 70 C90 90 70 110 50 115 C30 110 10 90 10 70 Z"
-                                  fill="#b30000" stroke="#d4af37" stroke-width="3" />
-                        </svg>
-                    </div>
-                    <div class="wordmark">
-                        <span class="wordmark-title">Student Learning Portal</span>
-                        <span class="wordmark-subtitle">Dashboard</span>
-                    </div>
-                </div>
-
-                <div class="header-actions">
-                    <button id="themeToggle" class="icon-btn">🌙</button>
-                </div>
-            </header>
-
-            <!-- Dashboard widgets -->
-            <main class="dashboard-grid">
-
-                <!-- Avatar card -->
-                <section class="card card-avatar">
-                    <div class="avatar-wrapper">
-                        <div class="avatar-circle">
-                            <div class="avatar-face">
-                                <div class="avatar-eyes"></div>
-                                <div class="avatar-mouth"></div>
-                            </div>
-                            <div class="avatar-body"></div>
-                        </div>
-                    </div>
-                    <div class="avatar-info">
-                        <h2>Welcome, Student</h2>
-                        <p>Your personalised learning space is ready.</p>
-                    </div>
-                </section>
-
-                <!-- Time & date -->
-                <section class="card card-time">
-                    <h2>Current Time & Date</h2>
-                    <p id="currentTime"></p>
-                    <p id="currentDate"></p>
-                </section>
-
-                <!-- Quote API -->
-                <section class="card card-quote">
-                    <h2>Motivational Quote</h2>
-                    <p id="quoteText">Click the button to load a quote.</p>
-                    <button id="apiButton" class="primary-btn">Get a random quote</button>
-                </section>
-
-                <!-- Fun fact API -->
-                <section class="card card-fact">
-                    <h2>Fun Learning Fact</h2>
-                    <p id="factText">Click the button to load a fun fact.</p>
-                    <button id="factButton" class="secondary-btn">Get a fun fact</button>
-                </section>
-
-                <!-- Weather demo -->
-                <section class="card card-weather">
-                    <h2>Weather (Demo)</h2>
-                    <p id="weatherLocation">Location: London</p>
-                    <p id="weatherInfo">Click the button to simulate weather.</p>
-                    <button id="weatherButton" class="secondary-btn">Update weather</button>
-                </section>
-
-                <!-- Background colour -->
-                <section class="card card-theme">
-                    <h2>Theme & Background</h2>
-                    <p>Use the controls to personalise your experience.</p>
-                    <button id="colorBtn" class="secondary-btn">Random background colour</button>
-                </section>
-
-            </main>
-
-            <footer class="site-footer">
-                <p>&copy; 2026 Student Learning Portal · Designed by Oluwole</p>
-            </footer>
-
-        </div>
+<!-- Sidebar: multi-page navigation (event-driven) -->
+<aside class="sidebar">
+    <div class="sidebar-brand">
+        <img src="wordmark.png" alt="University Wordmark" class="logo-wordmark">
     </div>
+    <ul class="nav-list">
+        <li id="dashboardBtn">Dashboard</li>
+        <li id="coursesBtn">Courses</li>
+        <li id="assignmentsBtn">Assignments</li>
+        <li id="supportBtn">Support</li>
+        <li id="logoutBtn">Logout</li>
+    </ul>
+</aside>
 
-    <script src="script.js"></script>
+<main class="main-content">
+    <!-- Header: shows virtual identity and theme controls -->
+    <header class="main-header">
+        <div class="user-info">
+            <!-- Virtual Identity: personalised welcome using stored username -->
+            <h2 id="welcomeMessage"></h2>
+            <p>Academic Year 2026 · BSc Software Engineering</p>
+        </div>
+        <div class="theme-controls">
+            <!-- Event-driven: dark mode toggle -->
+            <button id="darkModeToggle">Dark Mode</button>
+            <!-- Event-driven: background colour picker -->
+            <input type="color" id="bgColorPicker" title="Change background colour">
+        </div>
+    </header>
+
+    <!-- Colourful dashboard cards (layout D: header + cards) -->
+    <section class="card-grid">
+        <!-- Quote card -->
+        <article class="card card-primary">
+            <h3>Motivational Quote</h3>
+            <p id="quoteText">Loading quote...</p>
+            <button id="refreshQuote">Refresh Quote</button>
+        </article>
+
+        <!-- Fun fact card -->
+        <article class="card card-secondary">
+            <h3>Fun Fact</h3>
+            <p id="factText">Loading fun fact...</p>
+            <button id="refreshFact">Refresh Fact</button>
+        </article>
+
+        <!-- Live weather + time + date -->
+        <article class="card card-accent">
+            <h3>Live Weather & Time</h3>
+            <p id="weatherText">Loading weather...</p>
+            <p id="timeText"></p>
+            <p id="dateText"></p>
+        </article>
+
+        <!-- Progress / deadlines card -->
+        <article class="card card-neutral">
+            <h3>Upcoming Deadlines</h3>
+            <ul>
+                <li>Final Year Project · 12 Nov</li>
+                <li>Distributed Systems · 18 Nov</li>
+                <li>Professional Practice · 25 Nov</li>
+            </ul>
+        </article>
+    </section>
+</main>
+
+<script src="script.js"></script>
 </body>
 </html>
-

@@ -15,74 +15,49 @@ Academic Integrity Notes:
     <title>Courses - Student Learning Portal</title>
     <link rel="stylesheet" href="style.css">
 </head>
+<body>
 
-<body class="dashboard-body" data-page="courses">
-
-    <div class="app-layout">
-
-        <!-- Sidebar -->
-        <aside class="sidebar">
-            <div class="sidebar-logo">
-                <div class="badge-circle small-badge">
-                    <svg viewBox="0 0 100 100">
-                        <circle cx="50" cy="50" r="45" fill="#b30000" stroke="#d4af37" stroke-width="4" />
-                        <text x="50" y="55" text-anchor="middle" fill="#ffffff" font-size="14">SLP</text>
-                    </svg>
-                </div>
-                <span class="sidebar-title">Portal</span>
-            </div>
-
-            <nav class="sidebar-nav">
-                <button class="nav-item">Dashboard</button>
-                <button class="nav-item active">Courses</button>
-                <button class="nav-item">Assignments</button>
-                <button class="nav-item">Support</button>
-            </nav>
-
-            <div class="sidebar-footer">
-                <button id="logoutBtn" class="secondary-btn">Logout</button>
-            </div>
-        </aside>
-
-        <!-- Main content -->
-        <div class="main-content">
-
-            <header class="dashboard-header">
-                <div class="logo-wrapper">
-                    <div class="crest-logo small-crest">
-                        <svg viewBox="0 0 100 120">
-                            <path d="M10 20 L50 5 L90 20 L90 70 C90 90 70 110 50 115 C30 110 10 90 10 70 Z"
-                                  fill="#b30000" stroke="#d4af37" stroke-width="3" />
-                        </svg>
-                    </div>
-                    <div class="wordmark">
-                        <span class="wordmark-title">Student Learning Portal</span>
-                        <span class="wordmark-subtitle">Courses</span>
-                    </div>
-                </div>
-            </header>
-
-            <main class="dashboard-grid">
-                <section class="card">
-                    <h2>Your Courses</h2>
-                    <p>Here you can view and manage your enrolled modules.</p>
-                    <ul>
-                        <li>Software Engineering</li>
-                        <li>Enterprise Systems</li>
-                        <li>Cloud Computing</li>
-                        <li>Cybersecurity Fundamentals</li>
-                    </ul>
-                </section>
-            </main>
-
-            <footer class="site-footer">
-                <p>&copy; 2026 Student Learning Portal · Designed by Oluwole</p>
-            </footer>
-
-        </div>
+<aside class="sidebar">
+    <div class="sidebar-brand">
+        <img src="wordmark.png" alt="University Wordmark" class="logo-wordmark">
     </div>
+    <ul class="nav-list">
+        <li id="dashboardBtn">Dashboard</li>
+        <li id="coursesBtn">Courses</li>
+        <li id="assignmentsBtn">Assignments</li>
+        <li id="supportBtn">Support</li>
+        <li id="logoutBtn">Logout</li>
+    </ul>
+</aside>
 
-    <script src="script.js"></script>
+<main class="main-content">
+    <header class="main-header">
+        <div class="user-info">
+            <h2>Courses</h2>
+            <p>Modules for your current academic year.</p>
+        </div>
+    </header>
+
+    <section class="card-grid">
+        <article class="card card-primary">
+            <h3>Software Engineering</h3>
+            <p>Design patterns, testing, and project management.</p>
+        </article>
+        <article class="card card-secondary">
+            <h3>Distributed Systems</h3>
+            <p>Cloud computing, microservices, and scalability.</p>
+        </article>
+        <article class="card card-accent">
+            <h3>Professional Practice</h3>
+            <p>CV building, interviews, and workplace skills.</p>
+        </article>
+        <article class="card card-neutral">
+            <h3>Optional Module</h3>
+            <p>Choose an elective to broaden your skills.</p>
+        </article>
+    </section>
+</main>
+
+<script src="script.js"></script>
 </body>
 </html>
-
