@@ -1,63 +1,103 @@
-<!-- 
-CIS046-3 Software for Enterprise
-Author: Oluwole
-
-Academic Integrity Notes:
-- Page layout inspired by common student support portals.
-- Structure supported by Microsoft Copilot (AI).
-- Final HTML written, adapted, and integrated by me.
--->
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Support - Student Learning Portal</title>
     <link rel="stylesheet" href="style.css">
 </head>
-<body>
+<body class="portal-body">
+    <div class="app-shell">
+        <aside class="sidebar">
+            <div class="sidebar-brand">
+                <div class="brand-mark">UB</div>
+                <div class="brand-copy">
+                    <span class="eyebrow">Student Portal</span>
+                    <h1>Bedfordshire</h1>
+                </div>
+            </div>
 
-<aside class="sidebar">
-    <div class="sidebar-brand">
-        <img src="wordmark.png" alt="University Wordmark" class="logo-wordmark">
+            <nav class="nav-list" aria-label="Main navigation">
+                <button class="nav-item" data-page="dashboard.html">Dashboard</button>
+                <button class="nav-item" data-page="courses.html">Courses</button>
+                <button class="nav-item" data-page="assignments.html">Assignments</button>
+                <button class="nav-item" data-page="library.html">Library</button>
+                <button class="nav-item" data-page="timetable.html">Timetable</button>
+                <button class="nav-item" data-page="profile.html">Profile</button>
+                <button class="nav-item active" data-page="support.html">Support</button>
+                <button class="nav-item logout" data-page="index.html">Logout</button>
+            </nav>
+
+            <div class="sidebar-footer">
+                <p>Student services</p>
+                <strong>Available 24/7</strong>
+            </div>
+        </aside>
+
+        <main class="main-panel">
+            <header class="topbar">
+                <div>
+                    <p class="eyebrow">Need help?</p>
+                    <h2>Support centre</h2>
+                </div>
+                <div class="header-actions">
+                    <button class="secondary-btn">Book appointment</button>
+                </div>
+            </header>
+
+            <section class="support-grid">
+                <article class="support-card click-target" data-page="courses.html">
+                    <span class="support-icon">A</span>
+                    <h3>Academic support</h3>
+                    <p>academic.support@beds.ac.uk</p>
+                    <small>Assessment guidance and study help</small>
+                </article>
+                <article class="support-card click-target" data-page="dashboard.html">
+                    <span class="support-icon">I</span>
+                    <h3>IT helpdesk</h3>
+                    <p>it.helpdesk@beds.ac.uk</p>
+                    <small>System access and device support</small>
+                </article>
+                <article class="support-card click-target" data-page="dashboard.html">
+                    <span class="support-icon">W</span>
+                    <h3>Wellbeing</h3>
+                    <p>wellbeing@beds.ac.uk</p>
+                    <small>Advice and personal wellbeing support</small>
+                </article>
+                <article class="support-card click-target" data-page="assignments.html">
+                    <span class="support-icon">C</span>
+                    <h3>Careers</h3>
+                    <p>careers@beds.ac.uk</p>
+                    <small>CVs, placements and employability</small>
+                </article>
+            </section>
+
+            <section class="info-panels">
+                <article class="panel">
+                    <div class="panel-header">
+                        <h3>Frequently asked questions</h3>
+                    </div>
+                    <ul class="faq-list">
+                        <li><strong>How do I submit an assignment?</strong><p>Use the assignment submission portal and upload before the deadline.</p></li>
+                        <li><strong>Can I change my timetable?</strong><p>Yes, contact student support for approval and enrollment help.</p></li>
+                        <li><strong>Where do I get academic advice?</strong><p>Use the academic support service or visit your personal tutor.</p></li>
+                    </ul>
+                </article>
+
+                <article class="panel">
+                    <div class="panel-header">
+                        <h3>Student services</h3>
+                    </div>
+                    <div class="quick-actions stacked">
+                        <button class="click-target" data-page="assignments.html">Request extension</button>
+                        <button class="click-target" data-page="courses.html">Check module handbook</button>
+                        <button class="click-target" data-page="support.html">Report technical issue</button>
+                    </div>
+                </article>
+            </section>
+        </main>
     </div>
-    <ul class="nav-list">
-        <li id="dashboardBtn">Dashboard</li>
-        <li id="coursesBtn">Courses</li>
-        <li id="assignmentsBtn">Assignments</li>
-        <li id="supportBtn">Support</li>
-        <li id="logoutBtn">Logout</li>
-    </ul>
-</aside>
 
-<main class="main-content">
-    <header class="main-header">
-        <div class="user-info">
-            <h2>Support</h2>
-            <p>Get help with your studies and wellbeing.</p>
-        </div>
-    </header>
-
-    <section class="card-grid">
-        <article class="card card-primary">
-            <h3>Academic Support</h3>
-            <p>Email: academic.support@beds.ac.uk</p>
-        </article>
-        <article class="card card-secondary">
-            <h3>IT Helpdesk</h3>
-            <p>Email: it.helpdesk@beds.ac.uk</p>
-        </article>
-        <article class="card card-accent">
-            <h3>Wellbeing Services</h3>
-            <p>Email: wellbeing@beds.ac.uk</p>
-        </article>
-        <article class="card card-neutral">
-            <h3>Careers & Employability</h3>
-            <p>Email: careers@beds.ac.uk</p>
-        </article>
-    </section>
-</main>
-
-<script src="script.js"></script>
+    <script src="script.js"></script>
 </body>
 </html>

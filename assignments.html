@@ -1,63 +1,72 @@
-<!-- 
-CIS046-3 Software for Enterprise
-Author: Oluwole
-
-Academic Integrity Notes:
-- Page layout inspired by typical assignment tracking dashboards.
-- Structure supported by Microsoft Copilot (AI).
-- Final HTML written, adapted, and integrated by me.
--->
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Assignments - Student Learning Portal</title>
     <link rel="stylesheet" href="style.css">
 </head>
-<body>
+<body class="portal-body">
+    <div class="app-shell">
+        <aside class="sidebar">
+            <div class="sidebar-brand">
+                <div class="brand-mark">UB</div>
+                <div class="brand-copy">
+                    <span class="eyebrow">Student Portal</span>
+                    <h1>Bedfordshire</h1>
+                </div>
+            </div>
 
-<aside class="sidebar">
-    <div class="sidebar-brand">
-        <img src="wordmark.png" alt="University Wordmark" class="logo-wordmark">
+            <nav class="nav-list" aria-label="Main navigation">
+                <button class="nav-item" data-page="dashboard.html">Dashboard</button>
+                <button class="nav-item" data-page="courses.html">Courses</button>
+                <button class="nav-item active" data-page="assignments.html">Assignments</button>
+                <button class="nav-item" data-page="library.html">Library</button>
+                <button class="nav-item" data-page="timetable.html">Timetable</button>
+                <button class="nav-item" data-page="profile.html">Profile</button>
+                <button class="nav-item" data-page="support.html">Support</button>
+                <button class="nav-item logout" data-page="index.html">Logout</button>
+            </nav>
+
+            <div class="sidebar-footer">
+                <p>Submission tracker</p>
+                <strong>4 active</strong>
+            </div>
+        </aside>
+
+        <main class="main-panel">
+            <header class="topbar">
+                <div>
+                    <p class="eyebrow">Progress overview</p>
+                    <h2>Assignments</h2>
+                </div>
+                <div class="header-actions">
+                    <button class="secondary-btn">New submission</button>
+                </div>
+            </header>
+
+            <section class="stats-grid assignments-summary">
+                <article class="stat-card stat-primary">
+                    <p>Submitted</p>
+                    <h3>2</h3>
+                    <span>Well on track</span>
+                </article>
+                <article class="stat-card stat-secondary">
+                    <p>In progress</p>
+                    <h3>1</h3>
+                    <span>Due this week</span>
+                </article>
+                <article class="stat-card stat-accent">
+                    <p>Not started</p>
+                    <h3>1</h3>
+                    <span>Needs attention</span>
+                </article>
+            </section>
+
+            <section id="assignmentList" class="assignment-list"></section>
+        </main>
     </div>
-    <ul class="nav-list">
-        <li id="dashboardBtn">Dashboard</li>
-        <li id="coursesBtn">Courses</li>
-        <li id="assignmentsBtn">Assignments</li>
-        <li id="supportBtn">Support</li>
-        <li id="logoutBtn">Logout</li>
-    </ul>
-</aside>
 
-<main class="main-content">
-    <header class="main-header">
-        <div class="user-info">
-            <h2>Assignments</h2>
-            <p>Track your deadlines and submission status.</p>
-        </div>
-    </header>
-
-    <section class="card-grid">
-        <article class="card card-primary">
-            <h3>Final Year Project</h3>
-            <p>Due: 12 Nov · Status: In progress</p>
-        </article>
-        <article class="card card-secondary">
-            <h3>Distributed Systems Report</h3>
-            <p>Due: 18 Nov · Status: Not started</p>
-        </article>
-        <article class="card card-accent">
-            <h3>Professional Practice Portfolio</h3>
-            <p>Due: 25 Nov · Status: Drafting</p>
-        </article>
-        <article class="card card-neutral">
-            <h3>Optional Module Assignment</h3>
-            <p>Due: 30 Nov · Status: Planning</p>
-        </article>
-    </section>
-</main>
-
-<script src="script.js"></script>
+    <script src="script.js"></script>
 </body>
 </html>

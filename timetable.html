@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Timetable - Student Learning Portal</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body class="portal-body">
+    <div class="app-shell">
+        <aside class="sidebar">
+            <div class="sidebar-brand">
+                <div class="brand-mark">UB</div>
+                <div class="brand-copy">
+                    <span class="eyebrow">Student Portal</span>
+                    <h1>Bedfordshire</h1>
+                </div>
+            </div>
+
+            <nav class="nav-list" aria-label="Main navigation">
+                <button class="nav-item" data-page="dashboard.html">Dashboard</button>
+                <button class="nav-item" data-page="courses.html">Courses</button>
+                <button class="nav-item" data-page="assignments.html">Assignments</button>
+                <button class="nav-item active" data-page="timetable.html">Timetable</button>
+                <button class="nav-item" data-page="profile.html">Profile</button>
+                <button class="nav-item" data-page="support.html">Support</button>
+                <button class="nav-item logout" data-page="index.html">Logout</button>
+            </nav>
+
+            <div class="sidebar-footer">
+                <p>Weekly plan</p>
+                <strong>Autumn term</strong>
+            </div>
+        </aside>
+
+        <main class="main-panel">
+            <header class="topbar">
+                <div>
+                    <p class="eyebrow">Your schedule</p>
+                    <h2>Timetable</h2>
+                </div>
+                <div class="header-actions">
+                    <button class="secondary-btn">Download</button>
+                </div>
+            </header>
+
+            <section id="timetableGrid" class="timetable-grid"></section>
+        </main>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>

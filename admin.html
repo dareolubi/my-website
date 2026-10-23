@@ -1,0 +1,192 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Portal - Student Learning Portal</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body class="portal-body admin-body">
+    <div class="app-shell">
+        <aside class="sidebar">
+            <div class="sidebar-brand">
+                <div class="brand-mark">UB</div>
+                <div class="brand-copy">
+                    <span class="eyebrow">Admin portal</span>
+                    <h1>Bedfordshire</h1>
+                </div>
+            </div>
+
+            <nav class="nav-list" aria-label="Main navigation">
+                <button class="nav-item active" type="button" data-section="adminOverview">Overview</button>
+                <button class="nav-item" type="button" data-section="studentRecords">Students</button>
+                <button class="nav-item" type="button" data-section="courseManagement">Courses</button>
+                <button class="nav-item" type="button" data-section="attendanceRecords">Attendance</button>
+                <button class="nav-item" type="button" data-section="loginActivity">Access log</button>
+                <button class="nav-item" type="button" data-section="communications">Announcements</button>
+                <button class="nav-item" type="button" data-section="adminReports">Reports</button>
+                <button class="nav-item" type="button" data-section="accountSettings">Settings</button>
+                <button class="nav-item logout" data-page="index.html">Logout</button>
+            </nav>
+
+            <div class="sidebar-footer">
+                <p>Administrator panel</p>
+                <strong>Campus operations</strong>
+            </div>
+        </aside>
+
+        <main class="main-panel">
+            <header class="topbar">
+                <div>
+                    <p class="eyebrow">Operations overview</p>
+                    <h2>Admin dashboard</h2>
+                </div>
+                <div class="header-actions">
+                    <button id="downloadAttendance" class="secondary-btn" type="button">Export attendance</button>
+                </div>
+            </header>
+
+            <section id="adminOverview">
+                <section id="adminSummary" class="stats-grid"></section>
+
+                <p class="admin-demo-note">Demo records are stored in this browser. Attendance is student self check-in, not automatic location tracking.</p>
+
+                <section class="info-panels admin-panels">
+                    <article class="panel panel-large" id="loginActivity">
+                    <div class="panel-header">
+                        <div>
+                            <p class="eyebrow">Access log</p>
+                            <h3>Student login activity</h3>
+                        </div>
+                        <button id="refreshAdminData" class="mini-btn" type="button">Refresh</button>
+                    </div>
+                    <table class="admin-table">
+                        <thead>
+                            <tr>
+                                <th>Student</th>
+                                <th>Event</th>
+                                <th>Date and time</th>
+                            </tr>
+                        </thead>
+                        <tbody id="loginActivityRows"></tbody>
+                    </table>
+                </article>
+
+                    <article class="panel" id="attendanceRecords">
+                    <div class="panel-header">
+                        <div>
+                            <p class="eyebrow">Today's sessions</p>
+                            <h3>Class attendance</h3>
+                        </div>
+                    </div>
+                    <label class="admin-filter-label" for="attendanceCourseFilter">Filter by class</label>
+                    <select id="attendanceCourseFilter" class="admin-filter">
+                        <option value="all">All classes</option>
+                    </select>
+                    <div class="table-scroll">
+                        <table class="admin-table">
+                            <thead>
+                                <tr><th>Student</th><th>Class</th><th>Check-in</th><th>Status</th></tr>
+                            </thead>
+                            <tbody id="attendanceRows"></tbody>
+                        </table>
+                    </div>
+                </article>
+                </section>
+            </section>
+
+            <section class="panel admin-section" id="studentRecords">
+                <div class="panel-header">
+                    <div>
+                        <p class="eyebrow">People management</p>
+                        <h3>Student directory</h3>
+                    </div>
+                    <input id="studentDirectorySearch" class="admin-filter" type="search" placeholder="Search students" aria-label="Search students">
+                </div>
+                <p class="admin-demo-note">Example directory records for this prototype; live sign-in events appear in the access log.</p>
+                <div class="table-scroll">
+                    <table class="admin-table">
+                        <thead><tr><th>Student</th><th>Student ID</th><th>Programme</th><th>Academic status</th><th>Portal session</th></tr></thead>
+                        <tbody id="studentDirectoryRows"></tbody>
+                    </table>
+                </div>
+            </section>
+
+            <section id="studentProfilePanel" class="panel admin-section student-profile-panel" aria-labelledby="studentProfileName" aria-live="polite" hidden>
+                <div class="student-profile-header">
+                    <div>
+                        <p class="eyebrow">Student record · fictional demo data</p>
+                        <h2 id="studentProfileName"></h2>
+                        <p id="studentProfileId" class="student-profile-number"></p>
+                    </div>
+                    <button id="closeStudentProfile" class="mini-btn" type="button">Close profile</button>
+                </div>
+                <dl id="studentProfileDetails" class="student-profile-details"></dl>
+            </section>
+
+            <section class="panel admin-section" id="courseManagement">
+                <div class="panel-header">
+                    <div>
+                        <p class="eyebrow">Academic administration</p>
+                        <h3>Course catalogue</h3>
+                    </div>
+                </div>
+                <div class="table-scroll">
+                    <table class="admin-table">
+                        <thead><tr><th>Module</th><th>Category</th><th>Credits</th><th>Enrolled students</th><th>Delivery</th></tr></thead>
+                        <tbody id="adminCourseRows"></tbody>
+                    </table>
+                </div>
+            </section>
+
+            <section class="panel admin-section" id="communications">
+                <div class="panel-header">
+                    <div>
+                        <p class="eyebrow">Institution communications</p>
+                        <h3>Publish student announcement</h3>
+                    </div>
+                </div>
+                <form id="announcementForm" class="announcement-form">
+                    <label for="announcementTitle">Title</label>
+                    <input id="announcementTitle" name="title" maxlength="90" required placeholder="Announcement title">
+                    <label for="announcementMessage">Message</label>
+                    <textarea id="announcementMessage" name="message" rows="3" maxlength="400" required placeholder="Write an update for students"></textarea>
+                    <button class="primary-btn" type="submit">Publish announcement</button>
+                </form>
+                <div id="adminAnnouncementList" class="admin-announcement-list" aria-live="polite"></div>
+            </section>
+
+            <section class="panel admin-section" id="adminReports">
+                <div class="panel-header">
+                    <div>
+                        <p class="eyebrow">Institution reporting</p>
+                        <h3>Activity reports</h3>
+                    </div>
+                </div>
+                <p class="attendance-note">Review sign-in activity and student-submitted class attendance. Export attendance from the page header.</p>
+                <div class="quick-actions">
+                    <button type="button" data-section="loginActivity">View access log</button>
+                    <button type="button" data-section="attendanceRecords">View attendance report</button>
+                </div>
+            </section>
+
+            <section class="panel admin-section" id="accountSettings">
+                <div class="panel-header">
+                    <div>
+                        <p class="eyebrow">Account administration</p>
+                        <h3>Portal settings</h3>
+                    </div>
+                </div>
+                <dl class="settings-list">
+                    <div><dt>Academic year</dt><dd>2026/27</dd></div>
+                    <div><dt>Administrator role</dt><dd>Demo account administrator</dd></div>
+                    <div><dt>Data storage</dt><dd>This browser only</dd></div>
+                    <div><dt>Attendance method</dt><dd>Student self check-in</dd></div>
+                </dl>
+            </section>
+        </main>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>

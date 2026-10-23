@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Library - Student Learning Portal</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body class="portal-body">
+    <div class="app-shell">
+        <aside class="sidebar">
+            <div class="sidebar-brand">
+                <div class="brand-mark">UB</div>
+                <div class="brand-copy">
+                    <span class="eyebrow">Student Portal</span>
+                    <h1>Bedfordshire</h1>
+                </div>
+            </div>
+
+            <nav class="nav-list" aria-label="Main navigation">
+                <button class="nav-item" data-page="dashboard.html">Dashboard</button>
+                <button class="nav-item" data-page="courses.html">Courses</button>
+                <button class="nav-item" data-page="assignments.html">Assignments</button>
+                <button class="nav-item active" data-page="library.html">Library</button>
+                <button class="nav-item" data-page="timetable.html">Timetable</button>
+                <button class="nav-item" data-page="profile.html">Profile</button>
+                <button class="nav-item" data-page="support.html">Support</button>
+                <button class="nav-item logout" data-page="index.html">Logout</button>
+            </nav>
+
+            <div class="sidebar-footer">
+                <p>Student library</p>
+                <strong>Open 08:00 - 22:00</strong>
+            </div>
+        </aside>
+
+        <main class="main-panel">
+            <header class="topbar">
+                <div>
+                    <p class="eyebrow">Learning resources</p>
+                    <h2>Library</h2>
+                </div>
+                <div class="header-actions">
+                    <button class="secondary-btn">New request</button>
+                </div>
+            </header>
+
+            <section class="library-toolbar">
+                <input id="librarySearch" type="text" placeholder="Search books, titles, topics..." aria-label="Search library">
+            </section>
+
+            <section id="libraryGrid" class="library-grid"></section>
+        </main>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>

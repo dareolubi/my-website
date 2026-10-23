@@ -1,63 +1,61 @@
-<!-- 
-CIS046-3 Software for Enterprise
-Author: Oluwole
-
-Academic Integrity Notes:
-- Page layout inspired by common student portal course pages.
-- Structure supported by Microsoft Copilot (AI).
-- Final HTML written, adapted, and integrated by me.
--->
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Courses - Student Learning Portal</title>
     <link rel="stylesheet" href="style.css">
 </head>
-<body>
+<body class="portal-body">
+    <div class="app-shell">
+        <aside class="sidebar">
+            <div class="sidebar-brand">
+                <div class="brand-mark">UB</div>
+                <div class="brand-copy">
+                    <span class="eyebrow">Student Portal</span>
+                    <h1>Bedfordshire</h1>
+                </div>
+            </div>
 
-<aside class="sidebar">
-    <div class="sidebar-brand">
-        <img src="wordmark.png" alt="University Wordmark" class="logo-wordmark">
+            <nav class="nav-list" aria-label="Main navigation">
+                <button class="nav-item" data-page="dashboard.html">Dashboard</button>
+                <button class="nav-item active" data-page="courses.html">Courses</button>
+                <button class="nav-item" data-page="assignments.html">Assignments</button>
+                <button class="nav-item" data-page="library.html">Library</button>
+                <button class="nav-item" data-page="timetable.html">Timetable</button>
+                <button class="nav-item" data-page="profile.html">Profile</button>
+                <button class="nav-item" data-page="support.html">Support</button>
+                <button class="nav-item logout" data-page="index.html">Logout</button>
+            </nav>
+
+            <div class="sidebar-footer">
+                <p>Semester</p>
+                <strong>Autumn 2026</strong>
+            </div>
+        </aside>
+
+        <main class="main-panel">
+            <header class="topbar">
+                <div>
+                    <p class="eyebrow">Academic record</p>
+                    <h2>My courses</h2>
+                </div>
+                <div class="header-actions">
+                    <button class="secondary-btn">Add module</button>
+                </div>
+            </header>
+
+            <section class="filter-bar">
+                <button class="filter-chip active">All</button>
+                <button class="filter-chip">Core</button>
+                <button class="filter-chip">Elective</button>
+                <button class="filter-chip">Project</button>
+            </section>
+
+            <section id="courseGrid" class="course-grid"></section>
+        </main>
     </div>
-    <ul class="nav-list">
-        <li id="dashboardBtn">Dashboard</li>
-        <li id="coursesBtn">Courses</li>
-        <li id="assignmentsBtn">Assignments</li>
-        <li id="supportBtn">Support</li>
-        <li id="logoutBtn">Logout</li>
-    </ul>
-</aside>
 
-<main class="main-content">
-    <header class="main-header">
-        <div class="user-info">
-            <h2>Courses</h2>
-            <p>Modules for your current academic year.</p>
-        </div>
-    </header>
-
-    <section class="card-grid">
-        <article class="card card-primary">
-            <h3>Software Engineering</h3>
-            <p>Design patterns, testing, and project management.</p>
-        </article>
-        <article class="card card-secondary">
-            <h3>Distributed Systems</h3>
-            <p>Cloud computing, microservices, and scalability.</p>
-        </article>
-        <article class="card card-accent">
-            <h3>Professional Practice</h3>
-            <p>CV building, interviews, and workplace skills.</p>
-        </article>
-        <article class="card card-neutral">
-            <h3>Optional Module</h3>
-            <p>Choose an elective to broaden your skills.</p>
-        </article>
-    </section>
-</main>
-
-<script src="script.js"></script>
+    <script src="script.js"></script>
 </body>
 </html>

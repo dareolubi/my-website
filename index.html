@@ -1,45 +1,45 @@
-<!-- 
-CIS046-3 Software for Enterprise
-Author: Oluwole
-
-Academic Integrity:
-- Overall layout inspired by common login page patterns.
-- Design ideas and structure supported by Microsoft Copilot (AI).
-- Final HTML written, adapted, and integrated by me for my assignment.
--->
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Student Learning Portal - Login</title>
     <link rel="stylesheet" href="style.css">
 </head>
 <body class="login-body">
+    <header class="brand-header">
+        <div class="brand-mark">UB</div>
+        <div class="brand-text">
+            <span class="eyebrow">Student Experience</span>
+            <h1>University of Bedfordshire</h1>
+            <p>Learning Portal</p>
+        </div>
+    </header>
 
-<header class="brand-header">
-    <!-- University-style branding: crest, wordmark, circular badge -->
-    <img src="crest.png" alt="University Crest" class="logo-crest">
-    <div class="brand-text">
-        <h1>University of Bedfordshire</h1>
-        <p>Student Learning Portal</p>
-    </div>
-    <img src="badge.png" alt="Student Badge" class="logo-badge">
-</header>
+    <main class="login-panel">
+        <div class="panel-head">
+            <p class="eyebrow">Welcome back</p>
+            <h2>Sign in</h2>
+        </div>
 
-<div class="login-container">
-    <h2>Sign in to your portal</h2>
+        <div class="login-role-switch" role="group" aria-label="Choose account type">
+            <button class="login-role active" type="button" data-login-role="student" aria-pressed="true">Student</button>
+            <button class="login-role" type="button" data-login-role="admin" aria-pressed="false">Admin</button>
+        </div>
 
-    <!-- Virtual Identity: user enters credentials to access personalised dashboard -->
-    <input type="text" id="usernameInput" placeholder="Username">
-    <input type="password" id="passwordInput" placeholder="Password">
+        <form id="loginForm">
+            <label id="usernameLabel" for="usernameInput">Student username</label>
+            <input type="text" id="usernameInput" placeholder="Enter your student username" autocomplete="username" required>
 
-    <!-- Event-driven: click triggers login logic in script.js -->
-    <button id="loginBtn">Login</button>
+            <label for="passwordInput">Password</label>
+            <input type="password" id="passwordInput" placeholder="Enter your password" autocomplete="current-password" required>
 
-    <p class="error-message" id="loginError"></p>
-</div>
+            <button id="loginBtn" class="primary-btn" type="submit">Student sign in</button>
+        </form>
 
-<script src="script.js"></script>
+        <p class="error-message" id="loginError" role="alert" aria-live="polite"></p>
+    </main>
+
+    <script src="script.js"></script>
 </body>
 </html>

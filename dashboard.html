@@ -1,88 +1,178 @@
-<!-- 
-CIS046-3 Software for Enterprise
-Author: Oluwole
-
-Academic Integrity Notes:
-- Dashboard layout inspired by common student portal designs.
-- Structure and UI ideas supported by Microsoft Copilot (AI).
-- All final HTML written, adapted, and integrated by me.
--->
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Dashboard - Student Learning Portal</title>
     <link rel="stylesheet" href="style.css">
 </head>
-<body>
+<body class="portal-body">
+    <div class="app-shell">
+        <aside class="sidebar">
+            <div class="sidebar-brand">
+                <div class="brand-mark">UB</div>
+                <div class="brand-copy">
+                    <span class="eyebrow">Student Portal</span>
+                    <h1>Bedfordshire</h1>
+                </div>
+            </div>
 
-<!-- Sidebar: multi-page navigation (event-driven) -->
-<aside class="sidebar">
-    <div class="sidebar-brand">
-        <img src="wordmark.png" alt="University Wordmark" class="logo-wordmark">
+            <nav class="nav-list" aria-label="Main navigation">
+                <button class="nav-item active" data-page="dashboard.html">Dashboard</button>
+                <button class="nav-item" data-page="courses.html">Courses</button>
+                <button class="nav-item" data-page="assignments.html">Assignments</button>
+                <button class="nav-item" data-page="library.html">Library</button>
+                <button class="nav-item" data-page="timetable.html">Timetable</button>
+                <button class="nav-item" data-page="profile.html">Profile</button>
+                <button class="nav-item" data-page="support.html">Support</button>
+                <button class="nav-item logout" data-page="index.html">Logout</button>
+            </nav>
+
+            <div class="sidebar-footer">
+                <p>Academic year</p>
+                <strong>2026/27</strong>
+            </div>
+        </aside>
+
+        <main class="main-panel">
+            <header class="topbar">
+                <div>
+                    <p class="eyebrow">Good morning</p>
+                    <h2 id="welcomeMessage">Welcome, Student</h2>
+                </div>
+
+                <div class="header-actions">
+                    <button class="secondary-btn search-button click-target" type="button" data-page="timetable.html">View timetable</button>
+                    <button id="darkModeToggle" class="secondary-btn">Dark mode</button>
+                    <label class="color-pick">
+                        <span>Accent</span>
+                        <input type="color" id="bgColorPicker" value="#7c3aed" aria-label="Choose background accent color">
+                    </label>
+                    <div class="theme-picker" aria-label="Background theme picker">
+                        <button class="theme-swatch active" data-palette="classic" type="button" aria-label="Classic palette"></button>
+                        <button class="theme-swatch" data-palette="ocean" type="button" aria-label="Ocean palette"></button>
+                        <button class="theme-swatch" data-palette="sunset" type="button" aria-label="Sunset palette"></button>
+                        <button class="theme-swatch" data-palette="forest" type="button" aria-label="Forest palette"></button>
+                    </div>
+                </div>
+            </header>
+
+            <section class="stats-grid">
+                <button class="stat-card stat-primary click-target" data-page="courses.html" type="button">
+                    <p>Credits this term</p>
+                    <h3>120</h3>
+                    <span>+8% from last term</span>
+                </button>
+                <button class="stat-card stat-secondary click-target" data-page="courses.html" type="button">
+                    <p>Modules complete</p>
+                    <h3>7/9</h3>
+                    <span>2 still in progress</span>
+                </button>
+                <button class="stat-card stat-accent click-target" data-page="support.html" type="button">
+                    <p>Attendance</p>
+                    <h3>94%</h3>
+                    <span>Above target</span>
+                </button>
+                <button class="stat-card stat-neutral click-target" data-page="assignments.html" type="button">
+                    <p>Deadlines due</p>
+                    <h3>3</h3>
+                    <span>Next due in 5 days</span>
+                </button>
+            </section>
+
+            <section class="content-grid">
+                <article class="panel panel-large">
+                    <div class="panel-header">
+                        <h3>Announcements</h3>
+                        <span class="tag success">Latest</span>
+                    </div>
+                    <ul id="studentAnnouncements" class="announcement-list">
+                        <li class="click-target" data-page="support.html">
+                            <strong>Career Services Workshop</strong>
+                            <p>Resume and interview practice session this Friday at 2:00pm.</p>
+                        </li>
+                        <li class="click-target" data-page="assignments.html">
+                            <strong>Project Mentoring Week</strong>
+                            <p>Book a one-to-one review for your final year project before Friday.</p>
+                        </li>
+                        <li class="click-target" data-page="courses.html">
+                            <strong>Library Access Update</strong>
+                            <p>Extended evening opening hours are available in the Learning Hub.</p>
+                        </li>
+                    </ul>
+                </article>
+
+                <article class="panel click-target" data-page="assignments.html">
+                    <div class="panel-header">
+                        <h3>Upcoming deadlines</h3>
+                        <span class="tag neutral">This month</span>
+                    </div>
+                    <ul class="deadline-list">
+                        <li><span>Final Year Project</span><strong>12 Nov</strong></li>
+                        <li><span>Distributed Systems</span><strong>18 Nov</strong></li>
+                        <li><span>Professional Practice</span><strong>25 Nov</strong></li>
+                    </ul>
+                </article>
+
+                <article class="panel">
+                    <div class="panel-header">
+                        <h3>Quick actions</h3>
+                        <span class="tag info">Fast links</span>
+                    </div>
+                    <div class="quick-actions">
+                        <button type="button" class="click-target" data-page="assignments.html">Submit work</button>
+                        <button type="button" class="click-target" data-page="timetable.html">Study planner</button>
+                        <button type="button" class="click-target" data-page="profile.html">Check grades</button>
+                        <button type="button" class="click-target" data-page="support.html">Book tutor</button>
+                    </div>
+                </article>
+            </section>
+
+            <section class="panel attendance-checkin" aria-labelledby="attendanceHeading">
+                <div class="panel-header">
+                    <div>
+                        <p class="eyebrow">Class attendance</p>
+                        <h3 id="attendanceHeading">Check in to a class</h3>
+                    </div>
+                    <span id="checkinStatus" class="tag neutral">Not checked in</span>
+                </div>
+                <p class="attendance-note">Check-in is recorded when you mark yourself present. This demo does not track your location.</p>
+                <div class="checkin-controls">
+                    <label for="classCheckinSelect">Class</label>
+                    <select id="classCheckinSelect"></select>
+                    <button id="classCheckinButton" class="primary-btn" type="button">Check in to class</button>
+                </div>
+            </section>
+
+            <section class="widget-grid">
+                <article class="panel widget-box">
+                    <div class="panel-header">
+                        <h3>Motivational quote</h3>
+                        <button id="refreshQuote" class="mini-btn">Refresh</button>
+                    </div>
+                    <p id="quoteText" class="widget-copy">Loading quote...</p>
+                </article>
+
+                <article class="panel widget-box">
+                    <div class="panel-header">
+                        <h3>Weather & time</h3>
+                    </div>
+                    <p id="weatherText">Loading weather...</p>
+                    <p id="timeText" class="time-text"></p>
+                    <p id="dateText" class="date-text"></p>
+                </article>
+
+                <article class="panel widget-box">
+                    <div class="panel-header">
+                        <h3>Fun fact</h3>
+                        <button id="refreshFact" class="mini-btn">Refresh</button>
+                    </div>
+                    <p id="factText" class="widget-copy">Loading fact...</p>
+                </article>
+            </section>
+        </main>
     </div>
-    <ul class="nav-list">
-        <li id="dashboardBtn">Dashboard</li>
-        <li id="coursesBtn">Courses</li>
-        <li id="assignmentsBtn">Assignments</li>
-        <li id="supportBtn">Support</li>
-        <li id="logoutBtn">Logout</li>
-    </ul>
-</aside>
 
-<main class="main-content">
-    <!-- Header: shows virtual identity and theme controls -->
-    <header class="main-header">
-        <div class="user-info">
-            <!-- Virtual Identity: personalised welcome using stored username -->
-            <h2 id="welcomeMessage"></h2>
-            <p>Academic Year 2026 · BSc Software Engineering</p>
-        </div>
-        <div class="theme-controls">
-            <!-- Event-driven: dark mode toggle -->
-            <button id="darkModeToggle">Dark Mode</button>
-            <!-- Event-driven: background colour picker -->
-            <input type="color" id="bgColorPicker" title="Change background colour">
-        </div>
-    </header>
-
-    <!-- Colourful dashboard cards (layout D: header + cards) -->
-    <section class="card-grid">
-        <!-- Quote card -->
-        <article class="card card-primary">
-            <h3>Motivational Quote</h3>
-            <p id="quoteText">Loading quote...</p>
-            <button id="refreshQuote">Refresh Quote</button>
-        </article>
-
-        <!-- Fun fact card -->
-        <article class="card card-secondary">
-            <h3>Fun Fact</h3>
-            <p id="factText">Loading fun fact...</p>
-            <button id="refreshFact">Refresh Fact</button>
-        </article>
-
-        <!-- Live weather + time + date -->
-        <article class="card card-accent">
-            <h3>Live Weather & Time</h3>
-            <p id="weatherText">Loading weather...</p>
-            <p id="timeText"></p>
-            <p id="dateText"></p>
-        </article>
-
-        <!-- Progress / deadlines card -->
-        <article class="card card-neutral">
-            <h3>Upcoming Deadlines</h3>
-            <ul>
-                <li>Final Year Project · 12 Nov</li>
-                <li>Distributed Systems · 18 Nov</li>
-                <li>Professional Practice · 25 Nov</li>
-            </ul>
-        </article>
-    </section>
-</main>
-
-<script src="script.js"></script>
+    <script src="script.js"></script>
 </body>
 </html>
