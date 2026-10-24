@@ -1,4 +1,4 @@
-const courseData = [
+let courseData = [
     { title: 'Software Engineering', category: 'Core', credit: '20 credits', progress: 82, description: 'Design patterns, testing strategy, and modern software delivery practices.' },
     { title: 'Distributed Systems', category: 'Core', credit: '20 credits', progress: 68, description: 'Cloud architecture, scalability, service coordination, and resilient system design.' },
     { title: 'Professional Practice', category: 'Core', credit: '15 credits', progress: 74, description: 'Professional communication, workplace readiness, and career planning support.' },
@@ -26,14 +26,6 @@ const factPool = [
     'A group of flamingos is called a flamboyance.',
     'Octopuses have three hearts.',
     'Bananas are berries, but strawberries are not.'
-];
-
-const libraryData = [
-    { title: 'Clean Code', author: 'Robert C. Martin', category: 'Software', status: 'Available', due: 'Next 2 days' },
-    { title: 'Designing Data-Intensive Applications', author: 'Martin Kleppmann', category: 'Systems', status: 'Borrowed', due: 'Due 7 Nov' },
-    { title: 'Human-Computer Interaction', author: 'Alan Dix', category: 'Design', status: 'Available', due: 'Next 5 days' },
-    { title: 'The Pragmatic Programmer', author: 'Andrew Hunt', category: 'Career', status: 'Available', due: 'Next 1 day' },
-    { title: 'Operating Systems', author: 'A. Silberschatz', category: 'Computing', status: 'Reserved', due: 'Queue 3' }
 ];
 
 const timetableData = [
@@ -87,13 +79,6 @@ const profileData = {
     gpa: '3.8'
 };
 
-const adminStudentRecords = [
-    { name: 'Aisha Rahman', id: 'UB234567', programme: 'BSc Computer Science', course: 'BSc Computer Science', status: 'On track', username: 'student', dateOfBirth: '2002-05-14', address: '12 Sample Street, Luton, LU1 2AB', attendance: '94%', courseStart: '2023-09-18', expectedLeaving: '2026-06-30', email: 'aisha.rahman@example.edu' },
-    { name: 'Daniel Smith', id: 'UB234568', programme: 'BSc Computer Science', course: 'BSc Computer Science', status: 'Needs review', username: 'demo-daniel', dateOfBirth: '2001-11-03', address: '8 Example Road, Bedford, MK40 1AA', attendance: '81%', courseStart: '2023-09-18', expectedLeaving: '2026-06-30', email: 'daniel.smith@example.edu' },
-    { name: 'Priya Shah', id: 'UB234569', programme: 'BSc Computer Science', course: 'BSc Computer Science', status: 'On track', username: 'demo-priya', dateOfBirth: '2002-02-21', address: '24 Demo Avenue, Milton Keynes, MK9 2AB', attendance: '97%', courseStart: '2023-09-18', expectedLeaving: '2026-06-30', email: 'priya.shah@example.edu' },
-    { name: 'Omar Ali', id: 'UB234570', programme: 'BSc Computer Science', course: 'BSc Computer Science', status: 'Action needed', username: 'demo-omar', dateOfBirth: '2001-08-09', address: '5 Example Close, Luton, LU2 7AA', attendance: '73%', courseStart: '2023-09-18', expectedLeaving: '2026-06-30', email: 'omar.ali@example.edu' }
-];
-
 const palettes = {
     classic: { accent: '#7c3aed', accentStrong: '#5b21b6' },
     ocean: { accent: '#0ea5e9', accentStrong: '#0369a1' },
@@ -105,13 +90,35 @@ function getCurrentUser() {
     return localStorage.getItem('portalUser') || 'student';
 }
 
-function readPortalRecords(key) {
-    try {
-        const records = JSON.parse(localStorage.getItem(key) || '[]');
-        return Array.isArray(records) ? records : [];
-    } catch {
-        return [];
+async function apiRequest(url, options = {}) {
+    if (window.location.protocol === 'file:') {
+        throw new Error('Start the backend with start-portal.bat, then open http://localhost:8001/index.html. Do not open index.html directly.');
     }
+    const { body, headers: suppliedHeaders, ...requestOptions } = options;
+    const headers = new Headers(suppliedHeaders || {});
+    if (body !== undefined && !headers.has('content-type')) headers.set('content-type', 'application/json');
+    const response = await fetch(url, {
+        ...requestOptions,
+        headers,
+        credentials: 'same-origin',
+        body: body === undefined ? undefined : JSON.stringify(body)
+    });
+    if (response.status === 204) return null;
+    const payload = await response.json().catch(() => ({}));
+    if (!response.ok) throw new Error(payload.error || 'The server could not complete that request.');
+    return payload;
+}
+
+function cachePortalUser(user) {
+    localStorage.setItem('portalUser', user.role);
+    localStorage.setItem('username', user.username);
+    localStorage.setItem('displayName', user.displayName || user.name || 'Student');
+}
+
+function clearCachedPortalUser() {
+    localStorage.removeItem('portalUser');
+    localStorage.removeItem('username');
+    localStorage.removeItem('displayName');
 }
 
 function escapeHTML(value) {
@@ -122,41 +129,6 @@ function escapeHTML(value) {
         '"': '&quot;',
         "'": '&#39;'
     })[character]);
-}
-
-function getStudentDisplayName() {
-    return localStorage.getItem('displayName') || profileData.name;
-}
-
-function getLocalDateKey(date = new Date()) {
-    const year = date.getFullYear();
-    const month = String(date.getMonth() + 1).padStart(2, '0');
-    const day = String(date.getDate()).padStart(2, '0');
-    return `${year}-${month}-${day}`;
-}
-
-function recordStudentEvent(eventType) {
-    const now = new Date();
-    const entry = {
-        student: getStudentDisplayName(),
-        username: localStorage.getItem('username') || 'student',
-        event: eventType,
-        timestamp: now.toISOString(),
-        dateKey: getLocalDateKey(now)
-    };
-    const activity = readPortalRecords('portalLoginActivity');
-    activity.unshift(entry);
-    localStorage.setItem('portalLoginActivity', JSON.stringify(activity.slice(0, 100)));
-
-    if (eventType === 'Signed in') {
-        localStorage.setItem('portalActiveStudent', JSON.stringify({
-            student: entry.student,
-            username: entry.username,
-            timestamp: entry.timestamp
-        }));
-    } else {
-        localStorage.removeItem('portalActiveStudent');
-    }
 }
 
 function setWelcomeMessage() {
@@ -192,12 +164,15 @@ function bindThemePresets() {
 
 function attachNavigationHandlers() {
     document.querySelectorAll('.nav-item[data-page]').forEach((button) => {
-        button.addEventListener('click', () => {
+        button.addEventListener('click', async () => {
             const page = button.dataset.page;
             if (page === 'index.html') {
-                if (getCurrentUser() === 'student') recordStudentEvent('Signed out');
-                localStorage.removeItem('username');
-                localStorage.removeItem('portalUser');
+                try {
+                    await apiRequest('/api/auth/logout', { method: 'POST' });
+                } catch {
+                    // The server session may already have expired.
+                }
+                clearCachedPortalUser();
             }
             window.location.href = page;
         });
@@ -253,27 +228,21 @@ function loginHandler() {
         });
     });
 
-    loginForm.addEventListener('submit', (event) => {
+    loginForm.addEventListener('submit', async (event) => {
         event.preventDefault();
         const username = usernameInput.value.trim().toLowerCase();
         const password = passwordInput.value.trim();
 
-        if (selectedRole === 'student' && username === 'student' && password === 'password') {
-            localStorage.setItem('username', username);
-            localStorage.setItem('portalUser', 'student');
-            recordStudentEvent('Signed in');
-            window.location.href = 'dashboard.html';
-            return;
+        try {
+            const result = await apiRequest('/api/auth/login', {
+                method: 'POST',
+                body: { username, password, role: selectedRole }
+            });
+            cachePortalUser(result.user);
+            window.location.href = result.user.role === 'admin' ? 'admin.html' : 'dashboard.html';
+        } catch (error) {
+            errorText.textContent = error.message;
         }
-
-        if (selectedRole === 'admin' && username === 'admin' && password === 'admin123') {
-            localStorage.setItem('username', 'admin');
-            localStorage.setItem('portalUser', 'admin');
-            window.location.href = 'admin.html';
-            return;
-        }
-
-        errorText.textContent = 'The username or password is incorrect.';
     });
 }
 
@@ -304,6 +273,15 @@ function renderCourses(filter = 'All') {
     `).join('');
 
     bindDynamicClickTargets();
+}
+
+async function loadCourseData() {
+    const isAdminPage = Boolean(document.getElementById('adminSummary'));
+    const result = await apiRequest(isAdminPage ? '/api/admin/courses' : '/api/courses');
+    courseData = result.courses.map((course) => ({
+        ...course,
+        credit: `${course.credits} credits`
+    }));
 }
 
 function bindCourseFilters() {
@@ -350,41 +328,55 @@ function renderAssignments() {
     bindDynamicClickTargets();
 }
 
-function renderLibrary() {
+async function renderLibrary() {
     const libraryGrid = document.getElementById('libraryGrid');
     if (!libraryGrid) return;
 
-    libraryGrid.innerHTML = libraryData.map((item) => {
+    let items;
+    try {
+        items = (await apiRequest('/api/library')).items;
+    } catch (error) {
+        libraryGrid.innerHTML = `<p class="empty-table-message">${escapeHTML(error.message)}</p>`;
+        return;
+    }
+
+    libraryGrid.innerHTML = items.map((item) => {
         const statusClass = item.status === 'Available' ? 'status-submitted' : item.status === 'Borrowed' ? 'status-progress' : 'status-due';
+        const action = item.status === 'Borrowed' ? 'Return' : item.status === 'Available' ? 'Borrow' : 'Reserve';
+        const due = item.status === 'Borrowed' && item.dueAt
+            ? `Due ${new Date(item.dueAt).toLocaleDateString()}`
+            : item.status === 'Unavailable'
+                ? `Waiting list: ${item.queueLength}`
+                : '14-day loan';
         return `
-            <article class="library-card">
+            <article class="library-card" data-library-item="${item.id}">
                 <div class="library-topline">
-                    <span class="course-badge">${item.category}</span>
+                    <span class="course-badge">${escapeHTML(item.category)}</span>
                     <span class="library-status ${statusClass}">${item.status}</span>
                 </div>
-                <h3>${item.title}</h3>
-                <p>${item.author}</p>
+                <h3>${escapeHTML(item.title)}</h3>
+                <p>${escapeHTML(item.author)}</p>
                 <div class="library-meta">
-                    <span>${item.due}</span>
-                    <button class="mini-btn borrow-btn" type="button">${item.status === 'Available' ? 'Borrow' : 'Reserve'}</button>
+                    <span>${due}</span>
+                    <button class="mini-btn borrow-btn" data-item-id="${item.id}" data-item-status="${item.status}" type="button">${action}</button>
                 </div>
             </article>
         `;
     }).join('');
 
     document.querySelectorAll('.borrow-btn').forEach((button) => {
-        button.addEventListener('click', () => {
-            const card = button.closest('.library-card');
-            const status = card.querySelector('.library-status');
-            const label = button;
-            if (status.textContent === 'Available') {
-                status.textContent = 'Borrowed';
-                status.className = 'library-status status-progress';
-                label.textContent = 'Reserved';
-            } else {
-                status.textContent = 'Available';
-                status.className = 'library-status status-submitted';
-                label.textContent = 'Borrow';
+        button.addEventListener('click', async () => {
+            const itemId = button.dataset.itemId;
+            const status = button.dataset.itemStatus;
+            const action = status === 'Borrowed' ? 'return' : status === 'Available' ? 'borrow' : 'reserve';
+            button.disabled = true;
+            try {
+                await apiRequest(`/api/library/${itemId}/${action}`, { method: 'POST' });
+                await renderLibrary();
+            } catch (error) {
+                const card = button.closest('.library-card');
+                if (card) card.querySelector('.library-meta span').textContent = error.message;
+                button.disabled = false;
             }
         });
     });
@@ -424,6 +416,7 @@ function loadWeather() {
     const weatherEl = document.getElementById('weatherText');
     if (!weatherEl) return;
 
+    // Interoperability example: request a JSON forecast from Open-Meteo over HTTPS.
     fetch('https://api.open-meteo.com/v1/forecast?latitude=52.04&longitude=-0.76&current_weather=true')
         .then((response) => response.json())
         .then((data) => {
@@ -491,51 +484,37 @@ function renderTimetable() {
     `).join('');
 }
 
-function renderProfile() {
+async function renderProfile() {
     const profileSummary = document.getElementById('profileSummary');
     const profileName = document.getElementById('profileName');
     if (!profileSummary || !profileName) return;
 
-    const storedName = localStorage.getItem('displayName');
-    const displayName = storedName || profileData.name;
+    let profile;
+    try {
+        profile = (await apiRequest('/api/profile')).profile;
+    } catch (error) {
+        profileSummary.textContent = error.message;
+        return;
+    }
 
-    profileName.textContent = displayName;
+    profileName.textContent = profile.name;
     profileSummary.innerHTML = `
-        <div class="profile-card">
-            <span class="profile-label">Student ID</span>
-            <strong>${profileData.studentId}</strong>
-        </div>
-        <div class="profile-card">
-            <span class="profile-label">Programme</span>
-            <strong>${profileData.programme}</strong>
-        </div>
-        <div class="profile-card">
-            <span class="profile-label">Current year</span>
-            <strong>${profileData.year}</strong>
-        </div>
-        <div class="profile-card">
-            <span class="profile-label">Credits</span>
-            <strong>${profileData.credits}</strong>
-        </div>
-        <div class="profile-card">
-            <span class="profile-label">GPA</span>
-            <strong>${profileData.gpa}</strong>
-        </div>
-        <div class="profile-card">
-            <span class="profile-label">Tutor</span>
-            <strong>${profileData.tutor}</strong>
-        </div>
+        <div class="profile-card"><span class="profile-label">Student ID</span><strong>${escapeHTML(profile.studentId)}</strong></div>
+        <div class="profile-card"><span class="profile-label">Programme</span><strong>${escapeHTML(profile.programme)}</strong></div>
+        <div class="profile-card"><span class="profile-label">Current year</span><strong>${profileData.year}</strong></div>
+        <div class="profile-card"><span class="profile-label">Attendance</span><strong>${profile.attendance}%</strong></div>
+        <div class="profile-card"><span class="profile-label">Course start</span><strong>${escapeHTML(profile.courseStart)}</strong></div>
+        <div class="profile-card"><span class="profile-label">Expected leaving</span><strong>${escapeHTML(profile.expectedLeaving)}</strong></div>
     `;
 
     const profileStatus = document.getElementById('profileStatus');
-    if (profileStatus) {
-        profileStatus.textContent = profileData.status;
-    }
+    if (profileStatus) profileStatus.textContent = profile.status;
 
     const profileEmail = document.getElementById('profileEmail');
-    if (profileEmail) {
-        profileEmail.textContent = profileData.email;
-    }
+    if (profileEmail) profileEmail.textContent = profile.email;
+
+    const profileInput = document.getElementById('profileNameInput');
+    if (profileInput) profileInput.value = profile.name;
 }
 
 function bindProfileActions() {
@@ -543,127 +522,130 @@ function bindProfileActions() {
     const profileInput = document.getElementById('profileNameInput');
     if (!saveButton || !profileInput) return;
 
-    saveButton.addEventListener('click', () => {
-        const name = profileInput.value.trim() || profileData.name;
-        localStorage.setItem('displayName', name);
-        renderProfile();
-        profileInput.value = name;
+    saveButton.addEventListener('click', async () => {
+        const name = profileInput.value.trim();
+        try {
+            await apiRequest('/api/profile', { method: 'PUT', body: { displayName: name } });
+            localStorage.setItem('displayName', name);
+            await renderProfile();
+        } catch (error) {
+            const profileStatus = document.getElementById('profileStatus');
+            if (profileStatus) profileStatus.textContent = error.message;
+        }
     });
 }
 
-function renderAdminOverview() {
+async function renderAdminOverview() {
     const adminData = document.getElementById('adminSummary');
     if (!adminData) return;
 
-    const today = getLocalDateKey();
-    const loginCount = readPortalRecords('portalLoginActivity')
-        .filter((entry) => entry.event === 'Signed in' && entry.dateKey === today).length;
-    const attendanceToday = readPortalRecords('portalAttendanceRecords')
-        .filter((entry) => entry.dateKey === today);
-    const currentlyPresent = attendanceToday.filter((entry) => !entry.checkOutAt).length;
-    let activeStudent = null;
     try {
-        activeStudent = JSON.parse(localStorage.getItem('portalActiveStudent') || 'null');
-    } catch {
-        activeStudent = null;
+        const overview = await apiRequest('/api/admin/overview');
+        adminData.innerHTML = `
+            <article class="stat-card stat-primary"><p>Student sign-ins today</p><h3>${overview.signInsToday}</h3><span>Recorded in the database</span></article>
+            <article class="stat-card stat-secondary"><p>Active student sessions</p><h3>${overview.activeSessions}</h3><span>Current authenticated sessions</span></article>
+            <article class="stat-card stat-accent"><p>Checked in today</p><h3>${overview.checkedIn}</h3><span>Student self check-ins</span></article>
+            <article class="stat-card stat-neutral"><p>Courses monitored</p><h3>${overview.courseCount}</h3><span>Persistent course catalogue</span></article>
+        `;
+    } catch (error) {
+        adminData.textContent = error.message;
     }
-
-    adminData.innerHTML = `
-        <article class="stat-card stat-primary"><p>Student sign-ins today</p><h3>${loginCount}</h3><span>Recorded in this browser</span></article>
-        <article class="stat-card stat-secondary"><p>Current student session</p><h3>${activeStudent ? '1' : '0'}</h3><span>${activeStudent ? escapeHTML(activeStudent.student) : 'No active demo session'}</span></article>
-        <article class="stat-card stat-accent"><p>Checked in now</p><h3>${currentlyPresent}</h3><span>Student self check-ins today</span></article>
-        <article class="stat-card stat-neutral"><p>Classes monitored</p><h3>${courseData.length}</h3><span>Available in the demo timetable</span></article>
-    `;
 }
 
-function renderAdminActivity() {
+async function renderAdminActivity() {
     const loginRows = document.getElementById('loginActivityRows');
     const attendanceRows = document.getElementById('attendanceRows');
     if (!loginRows || !attendanceRows) return;
 
-    const activity = readPortalRecords('portalLoginActivity');
-    loginRows.innerHTML = activity.length
-        ? activity.slice(0, 20).map((entry) => `
-            <tr>
-                <td>${escapeHTML(entry.student)}</td>
-                <td>${escapeHTML(entry.event)}</td>
-                <td>${new Date(entry.timestamp).toLocaleString()}</td>
-            </tr>
-        `).join('')
-        : '<tr><td colspan="3" class="empty-table-message">No student sign-ins recorded yet.</td></tr>';
-
-    const today = getLocalDateKey();
-    const selectedCourse = document.getElementById('attendanceCourseFilter')?.value || 'all';
-    const attendance = readPortalRecords('portalAttendanceRecords')
-        .filter((entry) => entry.dateKey === today && (selectedCourse === 'all' || entry.className === selectedCourse));
-    attendanceRows.innerHTML = attendance.length
-        ? attendance.map((entry) => `
-            <tr>
-                <td>${escapeHTML(entry.student)}</td>
-                <td>${escapeHTML(entry.className)}</td>
-                <td>${new Date(entry.checkInAt).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}</td>
-                <td><span class="library-status ${entry.checkOutAt ? 'status-neutral' : 'status-submitted'}">${entry.checkOutAt ? 'Checked out' : 'Present · self check-in'}</span></td>
-            </tr>
-        `).join('')
-        : '<tr><td colspan="4" class="empty-table-message">No class check-ins recorded today.</td></tr>';
-
-    renderAdminOverview();
+    const courseFilter = document.getElementById('attendanceCourseFilter')?.value || 'all';
+    const attendanceUrl = courseFilter === 'all'
+        ? '/api/admin/attendance'
+        : `/api/admin/attendance?courseId=${encodeURIComponent(courseFilter)}`;
+    try {
+        const [activityResult, attendanceResult] = await Promise.all([
+            apiRequest('/api/admin/login-activity'),
+            apiRequest(attendanceUrl)
+        ]);
+        const { activity } = activityResult;
+        const { attendance } = attendanceResult;
+        loginRows.innerHTML = activity.length
+            ? activity.slice(0, 20).map((entry) => `
+                <tr><td>${escapeHTML(entry.student)}</td><td>${escapeHTML(entry.event)}</td><td>${new Date(entry.timestamp).toLocaleString()}</td></tr>
+            `).join('')
+            : '<tr><td colspan="3" class="empty-table-message">No student sign-ins recorded yet.</td></tr>';
+        attendanceRows.innerHTML = attendance.length
+            ? attendance.map((entry) => `
+                <tr>
+                    <td>${escapeHTML(entry.student)}</td>
+                    <td>${escapeHTML(entry.className)}</td>
+                    <td>${new Date(entry.checkInAt).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}</td>
+                    <td><span class="library-status ${entry.checkOutAt ? 'status-neutral' : 'status-submitted'}">${entry.checkOutAt ? 'Checked out' : 'Present · self check-in'}</span></td>
+                </tr>
+            `).join('')
+            : '<tr><td colspan="4" class="empty-table-message">No class check-ins recorded today.</td></tr>';
+        await renderAdminOverview();
+    } catch (error) {
+        loginRows.innerHTML = `<tr><td colspan="3" class="empty-table-message">${escapeHTML(error.message)}</td></tr>`;
+        attendanceRows.innerHTML = '<tr><td colspan="4" class="empty-table-message">Attendance is unavailable.</td></tr>';
+    }
 }
 
-function renderAdminDirectory(filter = '') {
+async function renderAdminDirectory(filter = '') {
     const directoryRows = document.getElementById('studentDirectoryRows');
     if (!directoryRows) return;
 
-    let activeStudent = null;
     try {
-        activeStudent = JSON.parse(localStorage.getItem('portalActiveStudent') || 'null');
-    } catch {
-        activeStudent = null;
+        const { students } = await apiRequest('/api/admin/students');
+        const matchingStudents = students.filter((student) =>
+            `${student.name} ${student.studentId} ${student.programme} ${student.status}`.toLowerCase().includes(filter.toLowerCase())
+        );
+        directoryRows.innerHTML = matchingStudents.length
+            ? matchingStudents.map((student) => `
+                <tr>
+                    <td><button class="student-profile-link" type="button" data-student-id="${escapeHTML(student.studentId)}" aria-label="Open profile for ${escapeHTML(student.name)}">${escapeHTML(student.name)}</button></td>
+                    <td><button class="student-profile-link" type="button" data-student-id="${escapeHTML(student.studentId)}" aria-label="Open profile for student ${escapeHTML(student.studentId)}">${escapeHTML(student.studentId)}</button></td>
+                    <td>${escapeHTML(student.programme || 'Unassigned')}</td>
+                    <td>${escapeHTML(student.status)}</td>
+                    <td>${student.hasActiveSession ? 'Signed in' : 'No active session'}</td>
+                </tr>
+            `).join('')
+            : '<tr><td colspan="5" class="empty-table-message">No students match this search.</td></tr>';
+    } catch (error) {
+        directoryRows.innerHTML = `<tr><td colspan="5" class="empty-table-message">${escapeHTML(error.message)}</td></tr>`;
     }
-
-    const matchingStudents = adminStudentRecords.filter((student) =>
-        `${student.name} ${student.id} ${student.programme} ${student.status}`.toLowerCase().includes(filter.toLowerCase())
-    );
-    directoryRows.innerHTML = matchingStudents.length
-        ? matchingStudents.map((student) => `
-            <tr>
-                <td><button class="student-profile-link" type="button" data-student-id="${escapeHTML(student.id)}" aria-label="Open profile for ${escapeHTML(student.name)}">${escapeHTML(student.name)}</button></td>
-                <td><button class="student-profile-link" type="button" data-student-id="${escapeHTML(student.id)}" aria-label="Open profile for student ${escapeHTML(student.id)}">${escapeHTML(student.id)}</button></td>
-                <td>${escapeHTML(student.programme)}</td>
-                <td>${escapeHTML(student.status)}</td>
-                <td>${activeStudent?.username === student.username ? 'Signed in' : 'No active session'}</td>
-            </tr>
-        `).join('')
-        : '<tr><td colspan="5" class="empty-table-message">No students match this search.</td></tr>';
 }
 
-function openAdminStudentProfile(studentId) {
-    const student = adminStudentRecords.find((record) => record.id === studentId);
+async function openAdminStudentProfile(studentId) {
     const profilePanel = document.getElementById('studentProfilePanel');
     const name = document.getElementById('studentProfileName');
     const studentNumber = document.getElementById('studentProfileId');
     const details = document.getElementById('studentProfileDetails');
-    if (!student || !profilePanel || !name || !studentNumber || !details) return;
+    if (!profilePanel || !name || !studentNumber || !details) return;
 
-    const latestAttendance = readPortalRecords('portalAttendanceRecords')
-        .filter((entry) => entry.username === student.username)
-        .sort((first, second) => new Date(second.checkInAt) - new Date(first.checkInAt))[0];
-    const dateFormat = (value) => new Date(`${value}T00:00:00`).toLocaleDateString([], {
+    let student;
+    try {
+        student = (await apiRequest(`/api/admin/students/${encodeURIComponent(studentId)}`)).student;
+    } catch (error) {
+        details.innerHTML = `<div><dt>Profile error</dt><dd>${escapeHTML(error.message)}</dd></div>`;
+        profilePanel.hidden = false;
+        return;
+    }
+    const dateFormat = (value) => value ? new Date(`${value}T00:00:00`).toLocaleDateString([], {
         year: 'numeric', month: 'long', day: 'numeric'
-    });
+    }) : 'Not recorded';
 
     name.textContent = student.name;
-    studentNumber.textContent = student.id;
+    studentNumber.textContent = student.studentId;
     const fields = [
         ['Date of birth', dateFormat(student.dateOfBirth)],
         ['Home address', student.address],
         ['Email', student.email],
-        ['Course', student.course],
-        ['Attendance', `${student.attendance} (demo figure)`],
+        ['Course', student.courses.map((course) => course.title).join(', ')],
+        ['Attendance', `${student.attendance}%`],
         ['Course start', dateFormat(student.courseStart)],
         ['Expected course leaving', dateFormat(student.expectedLeaving)],
         ['Academic status', student.status],
-        ['Latest class check-in', latestAttendance ? `${latestAttendance.className} · ${new Date(latestAttendance.checkInAt).toLocaleString()}` : 'No check-ins recorded']
+        ['Latest class check-in', student.latestAttendance ? `${student.latestAttendance.className} · ${new Date(student.latestAttendance.checkInAt).toLocaleString()}` : 'No check-ins recorded']
     ];
     details.innerHTML = fields.map(([label, value]) => `
         <div><dt>${escapeHTML(label)}</dt><dd>${escapeHTML(value)}</dd></div>
@@ -681,17 +663,23 @@ function renderAdminCourses() {
             <td>${escapeHTML(course.title)}</td>
             <td>${escapeHTML(course.category)}</td>
             <td>${escapeHTML(course.credit)}</td>
-            <td>Demo data unavailable</td>
+            <td>${course.enrolledStudents ?? 'N/A'}</td>
             <td><span class="library-status status-submitted">Listed</span></td>
         </tr>
     `).join('');
 }
 
-function renderAdminAnnouncements() {
+async function renderAdminAnnouncements() {
     const announcementList = document.getElementById('adminAnnouncementList');
     if (!announcementList) return;
 
-    const announcements = readPortalRecords('portalAnnouncements');
+    let announcements;
+    try {
+        announcements = (await apiRequest('/api/announcements')).announcements;
+    } catch (error) {
+        announcementList.textContent = error.message;
+        return;
+    }
     announcementList.innerHTML = announcements.length
         ? announcements.slice(0, 5).map((announcement) => `
             <article class="admin-announcement-item">
@@ -702,11 +690,16 @@ function renderAdminAnnouncements() {
         : '<p class="empty-table-message">No admin announcements published yet.</p>';
 }
 
-function renderStudentAnnouncements() {
+async function renderStudentAnnouncements() {
     const announcementList = document.getElementById('studentAnnouncements');
     if (!announcementList) return;
 
-    const announcements = readPortalRecords('portalAnnouncements');
+    let announcements;
+    try {
+        announcements = (await apiRequest('/api/announcements')).announcements;
+    } catch {
+        return;
+    }
     const existingCustom = announcementList.querySelectorAll('[data-admin-announcement]');
     existingCustom.forEach((item) => item.remove());
     announcements.slice(0, 5).forEach((announcement) => {
@@ -725,23 +718,39 @@ function bindAnnouncementPublishing() {
     const form = document.getElementById('announcementForm');
     if (!form) return;
 
-    form.addEventListener('submit', (event) => {
+    form.addEventListener('submit', async (event) => {
         event.preventDefault();
         const title = document.getElementById('announcementTitle').value.trim();
         const message = document.getElementById('announcementMessage').value.trim();
         if (!title || !message) return;
 
-        const announcements = readPortalRecords('portalAnnouncements');
-        announcements.unshift({ title, message, createdAt: new Date().toISOString() });
-        localStorage.setItem('portalAnnouncements', JSON.stringify(announcements.slice(0, 20)));
-        form.reset();
-        renderAdminAnnouncements();
+        try {
+            await apiRequest('/api/announcements', { method: 'POST', body: { title, message } });
+            form.reset();
+            await renderAdminAnnouncements();
+        } catch (error) {
+            const list = document.getElementById('adminAnnouncementList');
+            if (list) list.textContent = error.message;
+        }
     });
 }
 
-function guardAdminPage() {
-    if (document.getElementById('adminSummary') && getCurrentUser() !== 'admin') {
+async function guardPortalAccess() {
+    const isLoginPage = Boolean(document.getElementById('loginForm'));
+    if (isLoginPage) return true;
+    try {
+        const { user } = await apiRequest('/api/auth/me');
+        cachePortalUser(user);
+        const expectedRole = document.getElementById('adminSummary') ? 'admin' : 'student';
+        if (user.role !== expectedRole) {
+            window.location.replace(user.role === 'admin' ? 'admin.html' : 'dashboard.html');
+            return false;
+        }
+        return true;
+    } catch {
+        clearCachedPortalUser();
         window.location.replace('index.html');
+        return false;
     }
 }
 
@@ -751,54 +760,51 @@ function bindClassCheckin() {
     const checkinStatus = document.getElementById('checkinStatus');
     if (!classSelect || !checkinButton || !checkinStatus) return;
 
-    classSelect.innerHTML = courseData.map((course) => `<option value="${escapeHTML(course.title)}">${escapeHTML(course.title)}</option>`).join('');
+    classSelect.innerHTML = courseData.map((course) => `<option value="${course.id}">${escapeHTML(course.title)}</option>`).join('');
 
-    const updateCheckinState = () => {
-        const today = getLocalDateKey();
-        const current = readPortalRecords('portalAttendanceRecords').find((entry) =>
-            entry.username === (localStorage.getItem('username') || 'student') &&
-            entry.dateKey === today && entry.className === classSelect.value && !entry.checkOutAt
+    const updateCheckinState = async () => {
+        const currentRecords = await apiRequest('/api/attendance/mine');
+        const current = currentRecords.attendance.find((entry) =>
+            String(entry.courseId) === classSelect.value && !entry.checkOutAt
         );
         checkinButton.textContent = current ? 'Check out of class' : 'Check in to class';
         checkinStatus.textContent = current ? `Present: ${current.className}` : 'Not checked in';
         checkinStatus.className = `tag ${current ? 'success' : 'neutral'}`;
+        checkinButton.dataset.attendanceId = current?.id || '';
     };
 
     classSelect.addEventListener('change', updateCheckinState);
-    checkinButton.addEventListener('click', () => {
-        const today = getLocalDateKey();
-        const attendance = readPortalRecords('portalAttendanceRecords');
-        const username = localStorage.getItem('username') || 'student';
-        const activeRecord = attendance.find((entry) =>
-            entry.username === username && entry.dateKey === today && entry.className === classSelect.value && !entry.checkOutAt
-        );
-
-        if (activeRecord) {
-            activeRecord.checkOutAt = new Date().toISOString();
-        } else {
-            attendance.unshift({
-                student: getStudentDisplayName(),
-                username,
-                className: classSelect.value,
-                dateKey: today,
-                checkInAt: new Date().toISOString(),
-                checkOutAt: ''
-            });
+    checkinButton.addEventListener('click', async () => {
+        checkinButton.disabled = true;
+        try {
+            if (checkinButton.dataset.attendanceId) {
+                await apiRequest(`/api/attendance/${checkinButton.dataset.attendanceId}/check-out`, { method: 'POST' });
+            } else {
+                await apiRequest('/api/attendance/check-in', {
+                    method: 'POST',
+                    body: { courseId: Number(classSelect.value) }
+                });
+            }
+            await updateCheckinState();
+        } catch (error) {
+            checkinStatus.textContent = error.message;
+            checkinStatus.className = 'tag neutral';
+        } finally {
+            checkinButton.disabled = false;
         }
-
-        localStorage.setItem('portalAttendanceRecords', JSON.stringify(attendance.slice(0, 100)));
-        updateCheckinState();
     });
 
-    updateCheckinState();
+    updateCheckinState().catch((error) => {
+        checkinStatus.textContent = error.message;
+    });
 }
 
-function exportAttendance() {
-    const records = readPortalRecords('portalAttendanceRecords');
+async function exportAttendance() {
+    const { attendance: records } = await apiRequest('/api/admin/attendance');
     const rows = [['Student', 'Username', 'Class', 'Date', 'Check-in', 'Check-out', 'Status']];
     records.forEach((entry) => rows.push([
         entry.student,
-        entry.username,
+        entry.studentId,
         entry.className,
         entry.dateKey,
         entry.checkInAt,
@@ -837,11 +843,20 @@ function bindAdminActions() {
     });
     directorySearch?.addEventListener('input', () => renderAdminDirectory(directorySearch.value));
     if (courseFilter) {
-        courseFilter.innerHTML += courseData.map((course) => `<option value="${escapeHTML(course.title)}">${escapeHTML(course.title)}</option>`).join('');
+        courseFilter.innerHTML = '<option value="all">All classes</option>' + courseData.map((course) =>
+            `<option value="${course.id}">${escapeHTML(course.title)}</option>`
+        ).join('');
         courseFilter.addEventListener('change', renderAdminActivity);
     }
     refreshButton?.addEventListener('click', renderAdminActivity);
-    exportButton?.addEventListener('click', exportAttendance);
+    exportButton?.addEventListener('click', async () => {
+        try {
+            await exportAttendance();
+        } catch (error) {
+            const note = document.querySelector('.admin-demo-note');
+            if (note) note.textContent = error.message;
+        }
+    });
     document.querySelectorAll('[data-section]').forEach((button) => {
         button.addEventListener('click', () => {
             document.querySelectorAll('[data-section]').forEach((item) => item.classList.remove('active'));
@@ -850,22 +865,7 @@ function bindAdminActions() {
         });
     });
 
-    if (document.getElementById('adminSummary')) {
-        renderAdminActivity();
-        renderAdminDirectory();
-        renderAdminCourses();
-        renderAdminAnnouncements();
-        bindAnnouncementPublishing();
-        window.addEventListener('storage', (event) => {
-            if (['portalLoginActivity', 'portalAttendanceRecords', 'portalActiveStudent'].includes(event.key)) {
-                renderAdminActivity();
-                renderAdminDirectory();
-            }
-            if (event.key === 'portalAnnouncements') {
-                renderAdminAnnouncements();
-            }
-        });
-    }
+    if (document.getElementById('adminSummary')) bindAnnouncementPublishing();
 }
 
 function bindRefreshButtons() {
@@ -873,34 +873,56 @@ function bindRefreshButtons() {
     document.getElementById('refreshFact')?.addEventListener('click', loadFact);
 }
 
-setWelcomeMessage();
-guardAdminPage();
-renderStudentAnnouncements();
-window.addEventListener('storage', (event) => {
-    if (event.key === 'portalAnnouncements') renderStudentAnnouncements();
-});
-attachNavigationHandlers();
-bindDynamicClickTargets();
-loginHandler();
-renderCourses();
-renderAssignments();
-renderLibrary();
-renderTimetable();
-renderProfile();
-renderAdminOverview();
-bindCourseFilters();
-bindLibrarySearch();
-loadQuote();
-loadFact();
-loadWeather();
-loadTime();
-setInterval(loadTime, 1000);
+async function initializePage() {
+    if (window.location.protocol === 'file:') {
+        window.location.replace('http://localhost:8001/index.html');
+        return;
+    }
+    if (!await guardPortalAccess()) return;
+    if (document.getElementById('loginForm')) {
+        loginHandler();
+        return;
+    }
 
-bindRefreshButtons();
-bindProfileActions();
-bindAdminActions();
-bindClassCheckin();
-darkModeToggle();
-setAccentColor();
-bindThemePresets();
+    setWelcomeMessage();
+    attachNavigationHandlers();
+    bindDynamicClickTargets();
+    try {
+        await loadCourseData();
+    } catch (error) {
+        const courseGrid = document.getElementById('courseGrid');
+        if (courseGrid) courseGrid.textContent = error.message;
+    }
+    if (document.getElementById('adminSummary')) renderAdminCourses();
+    renderCourses();
+    renderAssignments();
+    await renderLibrary();
+    renderTimetable();
+    await renderProfile();
+    await renderStudentAnnouncements();
+    bindCourseFilters();
+    bindLibrarySearch();
+    bindRefreshButtons();
+    bindProfileActions();
+    bindAdminActions();
+    bindClassCheckin();
+    darkModeToggle();
+    setAccentColor();
+    bindThemePresets();
+    loadQuote();
+    loadFact();
+    loadWeather();
+    loadTime();
+    setInterval(loadTime, 1000);
+
+    if (document.getElementById('adminSummary')) {
+        await Promise.all([renderAdminActivity(), renderAdminDirectory(), renderAdminAnnouncements()]);
+        setInterval(() => {
+            renderAdminActivity();
+            renderAdminDirectory(document.getElementById('studentDirectorySearch')?.value || '');
+        }, 15000);
+    }
+}
+
+initializePage();
 

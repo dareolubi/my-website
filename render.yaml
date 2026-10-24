@@ -1,0 +1,20 @@
+services:
+  - type: web
+    name: beds-student-portal
+    runtime: node
+    plan: free
+    region: frankfurt
+    buildCommand: npm install && npm test
+    startCommand: npm start
+    healthCheckPath: /api/health
+    envVars:
+      - key: NODE_VERSION
+        value: 24.22.0
+      - key: NODE_ENV
+        value: production
+      - key: PORTAL_DB_PATH
+        value: /tmp/portal.sqlite
+      - key: DEMO_STUDENT_PASSWORD
+        sync: false
+      - key: DEMO_ADMIN_PASSWORD
+        sync: false
