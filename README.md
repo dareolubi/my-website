@@ -50,11 +50,11 @@ Administrator features:
 Quotes and facts are selected from local JavaScript arrays. Weather is requested from Open-Meteo. Login, course, profile, attendance, announcement, and library operations use the API and database.
 
 🌐 Deployment
-The existing GitHub Pages address, <https://dareolubi.github.io/my-website/>, hosts only static files and cannot run this Express API. The full-stack website can be deployed as a Render web service using `render.yaml`; Render provides the shareable `onrender.com` URL after deployment.
+The full-stack website is deployed on Render at <https://beds-student-portal.onrender.com/>. This is the shareable URL for the student and admin portal. GitHub Pages cannot run the Express API, so visits to <https://dareolubi.github.io/my-website/> redirect to the matching page on Render.
 
 Technologies and data:
 - HTML5, CSS3, and vanilla JavaScript.
-- Git and GitHub Pages.
+- Git and GitHub for version control; Render for the full-stack deployment. GitHub Pages hosts the older static version only.
 - Node.js and Express for the same-origin JSON API.
 - Node's built-in SQLite driver for persistent local data in `data/portal.sqlite`.
 - HTTP-only, same-site session cookies and scrypt password hashing for the demo authentication flow.
@@ -68,8 +68,10 @@ Limitations:
 - Assignments are example records; file upload and grading are not implemented.
 - Render's free web service uses temporary storage for SQLite. Data such as announcements, attendance, and loans can reset when its instance sleeps or restarts. For durable public data, use a managed database or a paid persistent disk.
 
-🚀 Live Website
-Visit the deployed site at <https://dareolubi.github.io/my-website/>.
+## Live Website
+
+- Full-stack portal: <https://beds-student-portal.onrender.com/>
+- GitHub Pages (redirects to the full-stack portal): <https://dareolubi.github.io/my-website/>
 📂 Project Structure
 ```text
 index.html       Login and role selection
@@ -95,16 +97,15 @@ Requires Node.js 22.5 or later. On Windows, double-click `start-portal.bat` to s
 npm install
 ```
 
-You can also start the server manually with `npm start`, then open <http://localhost:8001/index.html>. Do not open `index.html` directly as a file because authentication requires the backend API. Stop the server with `Ctrl+C`. Run the API tests with `npm test`.
+You can also start the server manually with `npm start`, then open <http://localhost:8001/index.html>. Opening an HTML page directly from the project folder redirects to the public Render deployment. Stop the server with `Ctrl+C`. Run the API tests with `npm test`.
 
 Optional: set `DEMO_STUDENT_PASSWORD` or `DEMO_ADMIN_PASSWORD` before the first run to change the initial demo passwords. The database is seeded only when each account is first created; changing these environment values later does not change existing passwords.
 
-## Publish a Shareable Full-Stack Link
+## Redeploy the Full-Stack Site
 
-1. Push this project, including `render.yaml`, to the GitHub `main` branch.
-2. In Render, choose **New → Blueprint** and connect the `dareolubi/my-website` repository.
-3. Review the free web-service plan. Render will ask for `DEMO_STUDENT_PASSWORD` and `DEMO_ADMIN_PASSWORD`; enter demo-only passwords directly in Render, not in chat or source code.
-4. Wait for the build and health check to pass. Share the generated `https://<service-name>.onrender.com` link, not the GitHub Pages or `localhost` URL.
+1. Commit and push changes to the GitHub `main` branch.
+2. Render deploys the linked commit automatically when auto-deploy is enabled. Otherwise, open the Render service and choose **Manual Deploy → Deploy latest commit**.
+3. Wait for the build and health check to pass, then share <https://beds-student-portal.onrender.com/>. Do not share a `localhost` URL.
 
 The Render free instance may sleep when idle, so the first visit can take a little while to wake. Its temporary SQLite data resets after restarts. Use persistent hosting/database storage if you need data to survive restarts.
 

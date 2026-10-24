@@ -924,5 +924,18 @@ async function initializePage() {
     }
 }
 
-initializePage();
+const publicPortalPages = new Set([
+    'index.html', 'dashboard.html', 'courses.html', 'assignments.html',
+    'timetable.html', 'profile.html', 'library.html', 'support.html', 'admin.html'
+]);
+const openedFromFile = window.location.protocol === 'file:';
+const openedOnGitHubPages = window.location.hostname === 'dareolubi.github.io';
+
+if (openedFromFile || openedOnGitHubPages) {
+    const requestedPage = window.location.pathname.split('/').filter(Boolean).pop() || 'index.html';
+    const targetPage = publicPortalPages.has(requestedPage) ? requestedPage : 'index.html';
+    window.location.replace(`https://beds-student-portal.onrender.com/${targetPage}${window.location.search}${window.location.hash}`);
+} else {
+    initializePage();
+}
 
